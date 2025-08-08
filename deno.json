@@ -1,0 +1,28 @@
+{
+  "tasks": {
+    "generate": "deno run --allow-read --allow-write tools/generate.ts",
+    "fmt": "deno fmt",
+    "lint": "deno lint",
+    "check": "deno check tools/generate.ts"
+  },
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "semiColons": true,
+    "singleQuote": false,
+    "proseWrap": "preserve"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  }
+}
