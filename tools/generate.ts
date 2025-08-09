@@ -499,6 +499,12 @@ async function generateIndexHtml(): Promise<void> {
   console.log("wrote dist/index.html");
 }
 
+async function generateCNAME(): Promise<void> {
+  const cnamePath = join(DIST_DIR, "CNAME");
+  await Deno.writeTextFile(cnamePath, "snippets.tago.io");
+  console.log("wrote dist/CNAME");
+}
+
 async function main(): Promise<void> {
   await Deno.mkdir(DIST_DIR, { recursive: true });
 
@@ -517,6 +523,9 @@ async function main(): Promise<void> {
     console.log(`wrote ${relativePath} with ${payload.snippets.length} snippets`);
     console.log(`wrote dist/${runtime}/ with ${payload.snippets.length} clean files`);
   }
+
+  // Generate the CNAME file for GitHub Pages custom domain
+  await generateCNAME();
 
   // Generate the index.html file
   await generateIndexHtml();
