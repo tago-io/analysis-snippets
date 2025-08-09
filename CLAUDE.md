@@ -59,11 +59,28 @@ When creating snippets, choose the runtime that best matches your target audienc
 ### Prerequisites
 
 - Deno 2.x
+- Biome 2.x (for JavaScript/TypeScript formatting and linting)
+- Ruff 0.12+ (for Python formatting and linting)
 - Editor with EditorConfig support
 
 ### Code Style
 
-- **Indentation**: 2 spaces (except Python: 4 spaces)
+The project uses automated formatting tools to ensure consistent code style:
+
+**JavaScript/TypeScript (Biome):**
+- **Indentation**: 2 spaces
+- **Line width**: 100 characters
+- **Quotes**: Double quotes
+- **Semicolons**: Always
+- **Trailing commas**: ES5 style
+
+**Python (Ruff):**
+- **Indentation**: 4 spaces
+- **Line width**: 88 characters (Black compatible)
+- **Quotes**: Double quotes
+- **Import sorting**: Enabled
+
+**Common:**
 - **Line endings**: LF
 - **Encoding**: UTF-8
 - **Trailing whitespace**: Removed (except in Markdown)
@@ -75,11 +92,26 @@ When creating snippets, choose the runtime that best matches your target audienc
 # Generate JSON files from snippets
 deno task generate
 
-# Format code
+# Format all code (JS/TS with Biome, Python with Ruff)
 deno task fmt
 
-# Lint code
+# Format only JavaScript/TypeScript files
+deno task fmt:js
+
+# Format only Python files
+deno task fmt:py
+
+# Lint all code (JS/TS with Biome, Python with Ruff)
 deno task lint
+
+# Lint only JavaScript/TypeScript files
+deno task lint:js
+
+# Lint only Python files
+deno task lint:py
+
+# Lint and auto-fix issues
+deno task lint:fix
 
 # Type check
 deno task check
@@ -226,7 +258,14 @@ deno run --allow-read --allow-write tools/generate.ts
 Run the formatter to fix style issues:
 
 ```bash
+# Format all files
 deno task fmt
+
+# Format only JS/TS files
+deno task fmt:js
+
+# Format only Python files
+deno task fmt:py
 ```
 
 ### Linting Errors
@@ -234,5 +273,24 @@ deno task fmt
 Check for code quality issues:
 
 ```bash
+# Lint all files
 deno task lint
+
+# Auto-fix linting issues
+deno task lint:fix
+```
+
+### Tool Installation
+
+If Biome or Ruff are not available:
+
+```bash
+# Install Biome globally
+npm install -g @biomejs/biome
+
+# Install Ruff (macOS/Linux)
+curl -LsSf https://astral.sh/ruff/install.sh | sh
+
+# Install Ruff (Windows)
+powershell -c "irm https://astral.sh/ruff/install.ps1 | iex"
 ```

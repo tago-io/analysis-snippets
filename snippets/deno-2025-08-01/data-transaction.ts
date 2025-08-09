@@ -88,13 +88,9 @@ async function myAnalysis(context: AnalysisConstructorParams): Promise<void> {
   // Transform all Environment Variable to JSON.
   const environment = Utils.envToJson(context.environment);
   if (!environment.account_token) {
-    return context.log(
-      "You must setup an account_token in the Environment Variables."
-    );
+    return context.log("You must setup an account_token in the Environment Variables.");
   } else if (!environment.device_token) {
-    return context.log(
-      "You must setup an device_token in the Environment Variables."
-    );
+    return context.log("You must setup an device_token in the Environment Variables.");
   }
   // Instance the account class
   const account = new Account({ token: environment.account_token });
@@ -125,12 +121,7 @@ async function myAnalysis(context: AnalysisConstructorParams): Promise<void> {
   // Call a new function for each group in asynchronous way.
   await Promise.all(
     grouped_device_list.map((group) =>
-      calculateUserTransactions(
-        account,
-        storage,
-        group.value.replace(/ /g, ""),
-        group.device_list
-      )
+      calculateUserTransactions(account, storage, group.value.replace(/ /g, ""), group.device_list)
     )
   );
 }

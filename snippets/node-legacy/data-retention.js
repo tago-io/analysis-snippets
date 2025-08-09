@@ -16,7 +16,7 @@
  */
 
 const { Analysis, Resources } = require("@tago-io/sdk");
-const dayjs = require('dayjs');
+const dayjs = require("dayjs");
 
 // The function startAnalysis will run when you execute your analysis
 async function startAnalysis(context) {
@@ -40,7 +40,10 @@ async function startAnalysis(context) {
     const qty = 100; // remove 100 registers of each variable
     const end_date = dayjs().subtract(1, "month").toISOString(); // registers old than 1 month
 
-    await Resources.devices.deleteDeviceData(deviceObj.id, { variables, qty, end_date }).then(context.log).catch(context.log);
+    await Resources.devices
+      .deleteDeviceData(deviceObj.id, { variables, qty, end_date })
+      .then(context.log)
+      .catch(context.log);
   }
 }
 

@@ -18,13 +18,16 @@ Go the the analysis, then environment variables,
 type email on key, and insert your email on value
 type device_token on key and insert your device token on value
 """
+
 import base64
 from datetime import datetime
 
 from tagoio_sdk import Analysis, Device, Services
 from tagoio_sdk.modules.Utils.envToJson import envToJson
 
-DEVICE_VARIABLES = ["your_variable"]  # enter the variable from your device you would like
+DEVICE_VARIABLES = [
+    "your_variable"
+]  # enter the variable from your device you would like
 
 
 def html_content_for_pdf(dataVal, dataVar) -> None:

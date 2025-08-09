@@ -44,7 +44,7 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
 
   const deviceID = scope[0]?.device;
   if (!deviceID) {
-    return console.log('Device ID not found in the data scope');
+    return console.log("Device ID not found in the data scope");
   }
 
   const deviceCreateInfo: any = {
@@ -64,24 +64,30 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
     chunk_retention: 1, //consider change
   };
 
-  const result = await Resources.devices
-    .create(deviceCreateInfo)
-    .catch((error) => {
-      // Send the validation to the device.
-      // That way we create an error in the dashboard for feedback.
-      Resources.devices.sendDeviceData(deviceID, {
-        variable: "validation",
-        value: `Error when creating the device ${error}`,
-        metadata: { color: "red" },
-      });
-      throw error;
+  const result = await Resources.devices.create(deviceCreateInfo).catch((error) => {
+    // Send the validation to the device.
+    // That way we create an error in the dashboard for feedback.
+    Resources.devices.sendDeviceData(deviceID, {
+      variable: "validation",
+      value: `Error when creating the device ${error}`,
+      metadata: { color: "red" },
     });
+    throw error;
+  });
 
   // To add Configuration Parameters to the device:
-  await Resources.devices.paramSet(result.device_id, { key: "param_key", value: "10", sent: false });
+  await Resources.devices.paramSet(result.device_id, {
+    key: "param_key",
+    value: "10",
+    sent: false,
+  });
 
   // Send feedback to the dashboard:
-  await Resources.devices.sendDeviceData(deviceID, { variable: "validation", value: "Device succesfully created!", metadata: { type: "success" } });
+  await Resources.devices.sendDeviceData(deviceID, {
+    variable: "validation",
+    value: "Device succesfully created!",
+    metadata: { type: "success" },
+  });
   console.log(`Device succesfully created. ID: ${result.device_id}`);
 }
 

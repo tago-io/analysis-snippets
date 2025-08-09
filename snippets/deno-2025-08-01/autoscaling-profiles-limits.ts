@@ -40,16 +40,41 @@
  * 5 - Press the Copy Button and place at the Environment Variables tab of this analysis.
  */
 
-const { Analysis, Account, Utils } = require("@tago-io/sdk");
+import { Analysis, Account, Utils } from "jsr:@tago-io/sdk";
+import type { AnalysisConstructorParams } from "jsr:@tago-io/sdk";
+
+interface ServiceValue {
+  amount: number;
+}
+
+interface ServiceLimit {
+  limit: number;
+}
+
+interface ServiceLimits {
+  [key: string]: number;
+}
+
+interface AccountLimit {
+  [key: string]: ServiceLimit;
+}
+
+interface AutoScaleServices {
+  [key: string]: ServiceLimit;
+}
+
+interface Environment {
+  account_token: string;
+  [key: string]: string;
+}
 
 /**
  * Check if service needs autoscaling
- * @param {number} currentUsage current usage of the profile
- * @param {number} allocated limit allocated of the profile
- * @param {number} scale percentage of usage to allow scaling up
- * @returns
+ * @param currentUsage current usage of the profile
+ * @param allocated limit allocated of the profile
+ * @param scale percentage of usage to allow scaling up
  */
-function checkAutoScale(currentUsage, allocated, scale) {
+function checkAutoScale(currentUsage: number, allocated: number, scale: number): boolean {
   if (!scale || !allocated) {
     return false;
   }
@@ -60,11 +85,8 @@ function checkAutoScale(currentUsage, allocated, scale) {
 
 /**
  *  Get next valid service limit
- *
- * @param {{amount: number}[]} serviceValues
- * @param {number} accountLimit
  */
-function getNextTier(serviceValues, accountLimit) {
+function getNextTier(serviceValues: ServiceValue[], accountLimit: number): number | undefined {
   if (!accountLimit) {
     return undefined;
   }
@@ -77,11 +99,9 @@ function getNextTier(serviceValues, accountLimit) {
 
 /**
  * Parses the current limit of the account
- * @param {*} servicesLimit
- * @returns
  */
-function getAccountLimit(servicesLimit) {
-  return Object.keys(servicesLimit).reduce((result, key) => {
+function getAccountLimit(servicesLimit: Record<string, any>): AccountLimit {
+  return Object.keys(servicesLimit).reduce((result: AccountLimit, key) => {
     result[key] = servicesLimit[key];
 
     return result;
@@ -90,11 +110,8 @@ function getAccountLimit(servicesLimit) {
 
 /**
  * Find the ID of the profile from the token being used.
- * @param {Account} account
- * @param {string} token
- * @returns {string | null} profile id
  */
-async function getProfileIDByToken(account, token) {
+async function getProfileIDByToken(account: Account, token: string): Promise<string | false> {
   const profiles = await account.profiles.list();
   for (const profile of profiles) {
     const [token_exist] = await account.profiles.tokenList(profile.id, {
@@ -109,15 +126,15 @@ async function getProfileIDByToken(account, token) {
 
 /**
  * Calculate services to be scaled
- * @param {*} prices Service prices
- * @param {*} profileLimit
- * @param {*} profileLimitUsed
- * @param {*} accountLimit
- * @param {*} environment
- * @returns
  */
-function calculateAutoScale(prices, profileLimit, profileLimitUsed, accountLimit, environment) {
-  const autoScaleServices = {};
+function calculateAutoScale(
+  prices: Record<string, ServiceValue[]>,
+  profileLimit: ServiceLimits,
+  profileLimitUsed: ServiceLimits,
+  accountLimit: AccountLimit,
+  environment: Environment
+): AutoScaleServices | null {
+  const autoScaleServices: AutoScaleServices = {};
   for (const statisticKey in profileLimit) {
     if (!environment[statisticKey]) {
       continue;
@@ -128,7 +145,7 @@ function calculateAutoScale(prices, profileLimit, profileLimitUsed, accountLimit
       continue;
     }
 
-    if (isNaN(scale)) {
+    if (Number.isNaN(scale)) {
       console.error(
         `[ERROR] Ignoring ${statisticKey}, because the environment variable value is not a number.\n`
       );
@@ -159,8 +176,12 @@ function calculateAutoScale(prices, profileLimit, profileLimitUsed, accountLimit
   return autoScaleServices;
 }
 
-function reallocateProfiles(accountLimit, autoScaleServices, profileAllocation) {
-  const newAllocation = {};
+function reallocateProfiles(
+  accountLimit: AccountLimit,
+  autoScaleServices: AutoScaleServices,
+  profileAllocation: ServiceLimits
+): Record<string, number> | null {
+  const newAllocation: Record<string, number> = {};
 
   for (const service in autoScaleServices) {
     const newAccountLimit = autoScaleServices?.[service]?.limit || 0;
@@ -168,7 +189,7 @@ function reallocateProfiles(accountLimit, autoScaleServices, profileAllocation) 
 
     const difference = newAccountLimit - oldAccountLimit;
 
-    if (isNaN(difference) || difference <= 0) {
+    if (Number.isNaN(difference) || difference <= 0) {
       continue;
     }
 
@@ -186,31 +207,29 @@ function reallocateProfiles(accountLimit, autoScaleServices, profileAllocation) 
 
 /**
  * Get the environment variables and parses it to a JSON
- * @param {*} context Analysis context
- * @returns
  */
-function setupEnvironment(context) {
-  const environment = Utils.envToJson(context.environment);
+function setupEnvironment(context: AnalysisConstructorParams): Environment {
+  const environment = Utils.envToJson(context.environment) as Environment;
   if (!environment) {
-    return undefined;
+    throw new Error("Environment variables not found");
   }
 
   if (!environment.account_token || environment.account_token.length !== 36) {
-    throw "[ERROR] You must enter a valid account_token in the environment variable";
+    throw new Error("[ERROR] You must enter a valid account_token in the environment variable");
   }
 
   return environment;
 }
 
 // This function will run when you execute your analysis
-async function startAnalysis(context) {
+async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
   const environment = setupEnvironment(context);
 
   // Setup the account and get's the ID of the profile the account token belongs to.
   const account = new Account({ token: environment.account_token });
   const id = await getProfileIDByToken(account, environment.account_token);
   if (!id) {
-    throw "Profile not found for the account token in the environment variable";
+    throw new Error("Profile not found for the account token in the environment variable");
   }
 
   // Get the current subscriptions of our account for all the services.
@@ -282,18 +301,4 @@ async function startAnalysis(context) {
   }
 }
 
-// ? Export functions to be tested
-if (process.env.NODE_ENV === "test") {
-  module.exports = {
-    checkAutoScale,
-    reallocateProfiles,
-    calculateAutoScale,
-    getNextTier,
-    setupEnvironment,
-  };
-} else {
-  Analysis.use(startAnalysis);
-
-  // To run analysis on your machine (external)
-  // Analysis.use(myAnalysis, { token: "YOUR-TOKEN" });
-}
+Analysis.use(startAnalysis);

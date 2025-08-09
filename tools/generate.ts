@@ -4,12 +4,7 @@ const ROOT = resolve(new URL("../", import.meta.url).pathname);
 const SNIPPETS_DIR = join(ROOT, "snippets");
 const DIST_DIR = join(ROOT, "dist");
 
-const RUNTIME_DIRS = [
-  "node-legacy",
-  "deno-2025-08-01",
-  "python-legacy",
-  "python-2025-08-01",
-];
+const RUNTIME_DIRS = ["node-legacy", "deno-2025-08-01", "python-legacy", "python-2025-08-01"];
 
 const LANGUAGE_MAP: Record<string, string> = {
   "node-legacy": "javascript",
@@ -45,14 +40,14 @@ interface RuntimeJson {
 
 function slugify(value: string): string {
   value = value.trim().toLowerCase();
-  value = value.replace(/[^a-z0-9\-\_\s]/g, "");
+  value = value.replace(/[^a-z0-9\-_\s]/g, "");
   value = value.replace(/\s+/g, "-");
   return value;
 }
 
 function extractMetaFromCode(
   code: string,
-  filename: string,
+  filename: string
 ): { metadata: SnippetMetadata; cleanCode: string } {
   const lines = code.split("\n");
   let title = "";
@@ -68,7 +63,8 @@ function extractMetaFromCode(
 
     // Support different comment styles for metadata
     const commentMatch = trimmedLine.match(/^(?:\/\/|#|\/\*|\*)\s*@(\w+):\s*(.+?)(?:\s*\*\/)?$/);
-    if (commentMatch && i < 10) { // Only check first 10 lines for metadata
+    if (commentMatch && i < 10) {
+      // Only check first 10 lines for metadata
       foundMetadata = true;
       const [, key, value] = commentMatch;
       switch (key.toLowerCase()) {
@@ -79,7 +75,12 @@ function extractMetaFromCode(
           description = value.trim();
           break;
         case "tags":
-          tags.push(...value.split(",").map((t) => t.trim()).filter((t) => t));
+          tags.push(
+            ...value
+              .split(",")
+              .map((t) => t.trim())
+              .filter((t) => t)
+          );
           break;
       }
       // Skip this line in clean output
@@ -103,7 +104,7 @@ function extractMetaFromCode(
 
   return {
     metadata: { title, description, tags },
-    cleanCode: cleanLines.join("\n")
+    cleanCode: cleanLines.join("\n"),
   };
 }
 

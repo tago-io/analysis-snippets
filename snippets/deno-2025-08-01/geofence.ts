@@ -17,10 +17,33 @@
  * Follow this guide https://docs.tago.io/en/articles/151 and create
  * two geofences, one with the event code 'danger' and another named 'safe'.
  */
-const { Utils, Account, Analysis, Device, Services } = require("@tago-io/sdk");
-const geolib = require("geolib");
+
+import { Utils, Account, Analysis, Device, Services } from "jsr:@tago-io/sdk";
+import type { AnalysisConstructorParams, Data } from "jsr:@tago-io/sdk";
+
+interface Point {
+  latitude: number;
+  longitude: number;
+}
+
+interface GeofenceLocation {
+  type: "Polygon" | "Point";
+  coordinates: number[][];
+  radius?: number;
+}
+
+interface Geofence {
+  event: string;
+  geolocation: GeofenceLocation;
+  [key: string]: any;
+}
+
+interface Environment {
+  account_token: string;
+}
+
 // This function checks if our device is inside a polygon geofence
-function insidePolygon(point, geofence) {
+function insidePolygon(point: number[], geofence: number[][]): boolean {
   const x = point[1];
   const y = point[0];
   let inside = false;
@@ -34,8 +57,25 @@ function insidePolygon(point, geofence) {
   }
   return inside;
 }
+
+// Simple point-in-circle calculation to replace geolib dependency
+function isPointWithinRadius(point: Point, center: Point, radius: number): boolean {
+  const R = 6371000; // Earth's radius in meters
+  const dLat = (center.latitude - point.latitude) * (Math.PI / 180);
+  const dLon = (center.longitude - point.longitude) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(point.latitude * (Math.PI / 180)) *
+      Math.cos(center.latitude * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c;
+  return distance <= radius;
+}
+
 // This function checks if our device is inside any geofence
-function checkZones(point, geofence_list) {
+function checkZones(point: number[], geofence_list: Geofence[]): Geofence | undefined {
   // The line below gets all Polygon geofences that we may have.
   const polygons = geofence_list.filter((x) => x.geolocation.type === "Polygon");
   if (polygons.length) {
@@ -47,15 +87,15 @@ function checkZones(point, geofence_list) {
   // The line below gets all Point (circle) geofences that we may have.
   const circles = geofence_list.filter((x) => x.geolocation.type === "Point");
   if (circles.length) {
-    // Here we check if our device is inside any Point geofence using a third party library called geolib.
+    // Here we check if our device is inside any Point geofence using our built-in function.
     const pass_check = circles.map((x) =>
-      geolib.isPointWithinRadius(
+      isPointWithinRadius(
         { latitude: point[1], longitude: point[0] },
         {
           latitude: x.geolocation.coordinates[0],
           longitude: x.geolocation.coordinates[1],
         },
-        x.geolocation.radius
+        x.geolocation.radius || 100
       )
     );
     const index = pass_check.findIndex((x) => x);
@@ -63,44 +103,51 @@ function checkZones(point, geofence_list) {
   }
   return;
 }
+
 // This function help us get the device using just its id.
-async function getDevice(account, device_id) {
+async function getDevice(account: Account, device_id: string): Promise<Device> {
   const customer_token = await Utils.getTokenByName(account, device_id);
   const customer_dev = new Device({ token: customer_token });
   return customer_dev;
 }
 
-async function startAnalysis(context, scope) {
+async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
   context.log("Running");
 
   if (!scope[0]) {
-    throw "Scope is missing"; // doesn't need to run if scope[0] is null
+    throw new Error("Scope is missing"); // doesn't need to run if scope[0] is null
   }
 
   // The code block below gets all environment variables and checks if we have the needed ones.
-  const environment = Utils.envToJson(context.environment);
+  const environment = Utils.envToJson(context.environment) as Environment;
   if (!environment.account_token) {
-    throw "Missing account_token environment var";
+    throw new Error("Missing account_token environment var");
   }
 
   const account = new Account({ token: environment.account_token });
   const device_id = scope[0].device;
+
+  if (!device_id) {
+    throw new Error("Device ID not found in scope");
+  }
+
   // Here we get the device information using our account data and the device id.
   const device = await getDevice(account, device_id);
   // This checks if we received a location
   const location = scope.find((data) => data.variable === "location");
   if (!location || !location.location) return context.log("No location found in the scope.");
+
   // Now we check if we have any geofences to go through.
   const geofences = await device.getData({ variable: "geofence", qty: 10 });
-  const zones = geofences.map((geofence) => geofence.metadata);
-  const zone = checkZones(location.location.coordinates, zones);
+  const zones: Geofence[] = geofences.map((geofence) => geofence.metadata as Geofence);
+  const zone = checkZones([location.location.lng, location.location.lat], zones);
 
   // The line below starts our notification service.
   const notification = new Services({ token: context.token }).Notification;
 
   if (!zone) {
     // If no geofence is found, we stop our application sending a notification.
-    notification.send({
+    await notification.send({
       title: "No zone alert",
       message: "Your device is not inside any zone.",
     });
@@ -110,15 +157,15 @@ async function startAnalysis(context, scope) {
 
   if (zone.event === "danger") {
     // If our device is inside a danger geofence, we will send a notification with a danger alert.
-    notification.send({
+    await notification.send({
       title: "Danger alert",
       message: "Your device is inside a dangerous zone.",
     });
   }
   if (zone.event === "safe") {
     // If our device is inside a safe geofence, we will send a safe geofence notification.
-    notification.send({
-      title: "Sage alert",
+    await notification.send({
+      title: "Safe alert",
       message: "Your device is inside a safe zone.",
     });
   }
@@ -126,6 +173,3 @@ async function startAnalysis(context, scope) {
 }
 
 Analysis.use(startAnalysis);
-
-// To run analysis on your machine (external)
-// Analysis.use(myAnalysis, { token: "YOUR-TOKEN" });

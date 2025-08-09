@@ -1,22 +1,30 @@
 {
   "tasks": {
     "generate": "deno run --allow-read --allow-write tools/generate.ts",
-    "fmt": "deno fmt",
-    "lint": "deno lint",
+    "fmt": "npx @biomejs/biome format --write . && ruff format snippets/",
+    "fmt:js": "npx @biomejs/biome format --write .",
+    "fmt:py": "ruff format snippets/",
+    "lint": "npx @biomejs/biome lint . && ruff check snippets/",
+    "lint:js": "npx @biomejs/biome lint .",
+    "lint:py": "ruff check snippets/",
+    "lint:fix": "npx @biomejs/biome lint --write . && ruff check --fix snippets/",
     "check": "deno check tools/generate.ts"
   },
+  "exclude": ["dist/", "node_modules/", "snippets/node-legacy/"],
   "fmt": {
     "useTabs": false,
     "lineWidth": 100,
     "indentWidth": 2,
     "semiColons": true,
     "singleQuote": false,
-    "proseWrap": "preserve"
+    "proseWrap": "preserve",
+    "exclude": ["dist/", "node_modules/", "snippets/node-legacy/"]
   },
   "lint": {
     "rules": {
       "tags": ["recommended"]
-    }
+    },
+    "exclude": ["dist/", "node_modules/", "snippets/node-legacy/"]
   },
   "compilerOptions": {
     "strict": true,

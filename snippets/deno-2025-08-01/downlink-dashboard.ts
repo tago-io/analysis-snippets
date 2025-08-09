@@ -65,7 +65,9 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
   // Otherwise it will get from the environment variable.
   const device_id = payload.device;
   if (!device_id) {
-    return context.log("Device key <device> not found in the variables sent by the widget/dashboard.");
+    return context.log(
+      "Device key <device> not found in the variables sent by the widget/dashboard."
+    );
   }
 
   const resources = new Resources({ token: context.token });
@@ -76,8 +78,9 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
     confirmed: false,
   };
 
-  const result = await Utils.sendDownlink(resources, device_id, downlinkOptions)
-    .catch((error) => error);
+  const result = await Utils.sendDownlink(resources, device_id, downlinkOptions).catch(
+    (error) => error
+  );
 
   console.log(result);
 }

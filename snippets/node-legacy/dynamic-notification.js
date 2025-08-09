@@ -1,11 +1,12 @@
 // @title: Dynamic Notifications
 // @description: Send dynamic email, SMS and push notifications based on conditions
 // @tags: notification, dynamic, email, sms, push, conditional
+
 /*
  ** Notification Analysis Example
  ** Dynamically Sending Notifications
  **
- ** This script demonstrates how to send notifications via Email, SMS, and Push to TagoRUN Users using analysis. 
+ ** This script demonstrates how to send notifications via Email, SMS, and Push to TagoRUN Users using analysis.
  ** To execute this example, you must first set up an action by variable to trigger this analysis.
  ** Once the action meets your specified conditions, the corresponding data will be dispatched for analysis.
  **
@@ -19,14 +20,14 @@
  **  6 - To finalize your new Policy, hit the save button located in the bottom right corner of the screen.
  */
 
-const { Analysis, Services, Resources } = require('@tago-io/sdk');
+const { Analysis, Services, Resources } = require("@tago-io/sdk");
 
 async function startAnalysis(context, scope) {
   if (!scope[0]) {
-    return context.log('This analysis must be triggered by an action.');
+    return context.log("This analysis must be triggered by an action.");
   }
 
-  console.log('Analysis started');
+  console.log("Analysis started");
 
   // Get the device ID from the scope and retrieve device information.
   const device_id = scope[0].device;
@@ -42,9 +43,9 @@ async function startAnalysis(context, scope) {
   // For example, you can get the email directly from the user_id if it was specified:
   // const { email } = await account.run.userInfo(userID_tag.id);
   const device_name = device_info.name;
-  const email_tag = device_info.tags.find(tag => tag.key === 'email');
-  const phone_tag = device_info.tags.find(tag => tag.key === 'phone');
-  const userID_tag = device_info.tags.find(tag => tag.key === 'user_id');
+  const email_tag = device_info.tags.find((tag) => tag.key === "email");
+  const phone_tag = device_info.tags.find((tag) => tag.key === "phone");
+  const userID_tag = device_info.tags.find((tag) => tag.key === "user_id");
 
   // Instance the SMS and Email service usando the analysis token from the context.
   const email_service = new Services({ token: context.token }).email;
@@ -52,34 +53,43 @@ async function startAnalysis(context, scope) {
 
   // Send the notifications and output the results to the analysis console.
   if (email_tag) {
-    await email_service.send({
-      to: email_tag.value,
-      subject: 'Notification alert',
-      message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
-    }).then(console.log).catch(console.log);
+    await email_service
+      .send({
+        to: email_tag.value,
+        subject: "Notification alert",
+        message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
+      })
+      .then(console.log)
+      .catch(console.log);
   } else {
-    console.log('Email not found for this device.');
+    console.log("Email not found for this device.");
   }
 
   if (phone_tag) {
-    await sms_service.send({
-      to: phone_tag.value,
-      message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
-    }).then(console.log).catch(console.log);
+    await sms_service
+      .send({
+        to: phone_tag.value,
+        message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
+      })
+      .then(console.log)
+      .catch(console.log);
   } else {
-    console.log('Phone number not found for this device.');
+    console.log("Phone number not found for this device.");
   }
 
   if (userID_tag) {
-    await Resources.run.notificationCreate(userID_tag.value, {
-      title: 'Notification Alert',
-      message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
-    }).then(console.log).catch(console.log);
+    await Resources.run
+      .notificationCreate(userID_tag.value, {
+        title: "Notification Alert",
+        message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
+      })
+      .then(console.log)
+      .catch(console.log);
   } else {
-    console.log('User ID not found for this device.');
+    console.log("User ID not found for this device.");
   }
 
-  console.log('Script end.');
+  console.log("Script end.");
 }
 
 Analysis.use(startAnalysis);

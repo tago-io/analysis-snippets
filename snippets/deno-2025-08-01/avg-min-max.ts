@@ -48,9 +48,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
     };
 
     // Now we send the new object with the minimum value
-    await device
-      .sendData(minValue)
-      .then(() => context.log("Temperature Minimum Updated"));
+    await device.sendData(minValue).then(() => context.log("Temperature Minimum Updated"));
   } else {
     context.log("Minimum value not found");
   }
@@ -71,9 +69,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
       unit: "F",
     };
 
-    await device
-      .sendData(maxValue)
-      .then(() => context.log("Temperature Maximum Updated"));
+    await device.sendData(maxValue).then(() => context.log("Temperature Maximum Updated"));
   } else {
     context.log("Maximum value not found");
   }
@@ -100,9 +96,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
       unit: "F",
     };
 
-    await device
-      .sendData(avgValue)
-      .then(() => context.log("Temperature Average Updated"));
+    await device.sendData(avgValue).then(() => context.log("Temperature Average Updated"));
   } else {
     context.log("No result found for the avg calculation");
   }

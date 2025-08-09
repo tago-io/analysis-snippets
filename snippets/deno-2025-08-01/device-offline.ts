@@ -60,20 +60,22 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   const devices = await Resources.devices.list(deviceQuery);
 
   if (!devices.length) {
-    return context.log(`No device found with given tags. Key: ${env.tag_key}, Value: ${env.tag_value} `);
+    return context.log(
+      `No device found with given tags. Key: ${env.tag_key}, Value: ${env.tag_value} `
+    );
   }
 
   context.log("Checking devices: ", devices.map((x) => x.name).join(", "));
 
   const now = dayjs();
   const alert_devices: string[] = [];
-  
+
   for (const device of devices) {
     const last_input = dayjs(new Date(device.last_input));
 
     // Check the difference in minutes.
     const diffInMinutes = now.diff(last_input, "minute");
-    
+
     if (diffInMinutes > checkin_time) {
       alert_devices.push(device.name);
     }

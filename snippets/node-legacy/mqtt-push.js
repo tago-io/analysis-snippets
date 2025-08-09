@@ -1,6 +1,7 @@
 // @title: MQTT Push from Dashboard
 // @description: Send MQTT messages triggered from dashboard interactions
 // @tags: mqtt, push, dashboard, messaging, iot
+
 /*
  ** Analysis Example
  ** Get Device List
@@ -48,12 +49,12 @@ async function mqttPushExample(context, scope) {
   // Publishing to MQTT
   const MQTT = new Services({ token: context.token }).MQTT;
   MQTT.publish({
-      // bucket: myData.bucket, // for legacy devices
-      bucket: myData.device, // for immutable/mutable devices
-      message: JSON.stringify(myDataObject),
-      topic: "tago/my_topic",
-      options,
-    }).then(context.log, context.log)
+    // bucket: myData.bucket, // for legacy devices
+    bucket: myData.device, // for immutable/mutable devices
+    message: JSON.stringify(myDataObject),
+    topic: "tago/my_topic",
+    options,
+  }).then(context.log, context.log);
 }
 
 Analysis.use(mqttPushExample);

@@ -25,7 +25,7 @@ interface ApiResponse {
 async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
   const url = "https://api.tago.io/info";
   const headers = {
-    "Authorization": "Your-Account-Token",
+    Authorization: "Your-Account-Token",
   };
 
   try {

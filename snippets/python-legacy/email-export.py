@@ -19,6 +19,7 @@ type device_token on key, and paste your token on value
 click the + button to add a new environment
 on key, type email and on value, type the e-mail address
 """
+
 from tagoio_sdk import Analysis, Device, Services
 from tagoio_sdk.modules.Utils import envToJson
 
@@ -54,15 +55,17 @@ def my_analysis(context, scope: list[dict] = None) -> None:
     email = Services({"token": context.token}).email
 
     # Send the email.
-    service_response = email.send({
-        "message": "This is an example of a body message",
-        "subject": "Exported File from TagoIO",
-        "to": env_vars["email"],
-        "attachment": {
-            "archive": csv,
-            "filename": "exported_file.csv",
-        },
-    })
+    service_response = email.send(
+        {
+            "message": "This is an example of a body message",
+            "subject": "Exported File from TagoIO",
+            "to": env_vars["email"],
+            "attachment": {
+                "archive": csv,
+                "filename": "exported_file.csv",
+            },
+        }
+    )
 
     print(service_response)
 

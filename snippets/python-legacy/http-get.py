@@ -11,6 +11,7 @@ complex algorithms.
 Follow the link of documentation https://api.docs.tago.io/
 In this example we get the Account name and print to the console.
 """
+
 import urllib.request
 
 from tagoio_sdk import Analysis

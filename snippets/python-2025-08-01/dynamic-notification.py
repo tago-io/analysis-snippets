@@ -27,6 +27,7 @@ Steps to generate an account_token:
 4 - Generate a new Token with Expires Never.
 5 - Press the Copy Button and place at the Environment Variables tab of this analysis.
 """
+
 from tagoio_sdk import Analysis, Account, Services
 from tagoio_sdk.modules.Utils.envToJson import envToJson
 

@@ -6,13 +6,13 @@
  * TagoIO - Analysis Example
  * Device Data Amount Analysis
  *
- * This analysis retrieves the amount of data for each device and logs into the console 
+ * This analysis retrieves the amount of data for each device and logs into the console
  * the top 20 devices with the highest data amount.
- * 
+ *
  * Requirements:
  * - Access Policy must have permission to list devices (Device -> Access)
  * - Access Policy must have permission to get device data (Device -> Get Data)
- * 
+ *
  * Check out the SDK documentation on: https://js.sdk.tago.io
  * Create Access Policy at https://admin.tago.io/am
  *
@@ -32,7 +32,7 @@ interface DeviceAmountResult {
  */
 async function myAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
   const resultList: DeviceAmountResult[] = [];
-  
+
   const getDeviceAmount = async (deviceObj: TagoIODevice): Promise<void> => {
     const result = await Resources.devices.amount(deviceObj.id).catch(console.log);
     if (!result) {
@@ -45,7 +45,7 @@ async function myAnalysis(context: AnalysisConstructorParams, scope: Data[]): Pr
     // if (result < 40000) {
     //   return;
     // }
-  
+
     resultList.push({ name: deviceObj.name, id: deviceObj.id, amount: result });
     await new Promise((resolve) => setTimeout(resolve, 200)); // sleep
   };
@@ -66,11 +66,11 @@ async function myAnalysis(context: AnalysisConstructorParams, scope: Data[]): Pr
     if (activePromises >= maxConcurrency) {
       await Promise.race(devicePromises);
     }
-    
+
     const promise = getDeviceAmount(device).finally(() => {
       activePromises--;
     });
-    
+
     devicePromises.push(promise);
     activePromises++;
   }
@@ -82,7 +82,7 @@ async function myAnalysis(context: AnalysisConstructorParams, scope: Data[]): Pr
     console.error("No devices found to process");
     return;
   }
-  
+
   // Reorder resultList by the highest data amount
   resultList.sort((a, b) => b.amount - a.amount);
 

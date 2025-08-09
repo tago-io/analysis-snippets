@@ -1,6 +1,7 @@
 // @title: Device Offline Alert
 // @description: Monitor devices and send alerts when they go offline
 // @tags: device, offline, alert, monitoring, status
+
 /*
  ** Analysis Example
  ** Device Offline Alert
@@ -56,7 +57,9 @@ async function startAnalysis(context) {
   });
 
   if (!devices.length) {
-    return context.log(`No device found with given tags. Key: ${env.tag_key}, Value: ${env.tag_value} `);
+    return context.log(
+      `No device found with given tags. Key: ${env.tag_key}, Value: ${env.tag_value} `
+    );
   }
 
   context.log("Checking devices: ", devices.map((x) => x.name).join(", "));

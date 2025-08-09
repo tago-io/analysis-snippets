@@ -56,15 +56,15 @@ async function mqttPushExample(context: AnalysisConstructorParams, scope: Data[]
   // Publishing to MQTT
   const MQTT = new Services({ token: context.token }).MQTT;
   await MQTT.publish({
-      // bucket: myData.bucket, // for legacy devices
-      bucket: myData.device!, // for immutable/mutable devices
-      message: JSON.stringify(myDataObject),
-      topic: "tago/my_topic",
-      options,
-    }).then(
-      (result) => context.log(result), 
-      (error) => context.log(error)
-    );
+    // bucket: myData.bucket, // for legacy devices
+    bucket: myData.device!, // for immutable/mutable devices
+    message: JSON.stringify(myDataObject),
+    topic: "tago/my_topic",
+    options,
+  }).then(
+    (result) => context.log(result),
+    (error) => context.log(error)
+  );
 }
 
 Analysis.use(mqttPushExample);

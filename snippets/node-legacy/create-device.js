@@ -42,7 +42,7 @@ async function startAnalysis(context, scope) {
 
   const deviceID = scope[0]?.device;
   if (!deviceID) {
-    return console.log('Device ID not found in the data scope');
+    return console.log("Device ID not found in the data scope");
   }
 
   const result = await Resources.devices
@@ -74,10 +74,18 @@ async function startAnalysis(context, scope) {
     });
 
   // To add Configuration Parameters to the device:
-  await Resources.devices.paramSet(result.device_id, { key: "param_key", value: "10", sent: false });
+  await Resources.devices.paramSet(result.device_id, {
+    key: "param_key",
+    value: "10",
+    sent: false,
+  });
 
   // Send feedback to the dashboard:
-  await Resources.devices.sendDeviceData(deviceID, { variable: "validation", value: "Device succesfully created!", metadata: { type: "success" } });
+  await Resources.devices.sendDeviceData(deviceID, {
+    variable: "validation",
+    value: "Device succesfully created!",
+    metadata: { type: "success" },
+  });
   console.log(`Device succesfully created. ID: ${result.device_id}`);
 }
 

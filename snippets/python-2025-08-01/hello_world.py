@@ -2,4 +2,4 @@
 # @description: Basic hello world for Python runtime (2025-08-01)
 # @tags: basic, python
 
-print('Hello from Python 2025-08-01')
+print("Hello from Python 2025-08-01")

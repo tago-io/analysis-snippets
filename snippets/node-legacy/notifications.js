@@ -17,10 +17,10 @@ async function startAnalysis(context) {
   const notification = new Services({ token: context.token }).Notification;
 
   // In this variable, you type the title of the notification
-  const title = 'Your title';
+  const title = "Your title";
 
   // In this variable, you type the message that you will send on the notification
-  const message = 'Your message';
+  const message = "Your message";
 
   try {
     const service_response = await notification.send({

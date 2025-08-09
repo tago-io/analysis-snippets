@@ -26,12 +26,7 @@
 const { Analysis, Account, Utils, Device } = require("@tago-io/sdk");
 const _ = require("lodash");
 
-async function calculateUserTransactions(
-  account,
-  storage,
-  user_value,
-  device_list
-) {
+async function calculateUserTransactions(account, storage, user_value, device_list) {
   // Collect the data amount for each device.
   // Result of bucket_results is:
   // [0, 120, 500, 0, 1000]
@@ -76,13 +71,9 @@ async function myAnalysis(context) {
   // Transform all Environment Variable to JSON.
   const environment = Utils.envToJson(context.environment);
   if (!environment.account_token) {
-    return context.log(
-      "You must setup an account_token in the Environment Variables."
-    );
+    return context.log("You must setup an account_token in the Environment Variables.");
   } else if (!environment.device_token) {
-    return context.log(
-      "You must setup an device_token in the Environment Variables."
-    );
+    return context.log("You must setup an device_token in the Environment Variables.");
   }
   // Instance the account class
   const account = new Account({ token: environment.account_token });
@@ -104,21 +95,14 @@ async function myAnalysis(context) {
     amount: 10000,
   });
   const grouped_device_list = _.chain(device_list)
-    .groupBy(
-      (collection) => collection.tags.find((x) => x.key === tag_to_search).value
-    )
+    .groupBy((collection) => collection.tags.find((x) => x.key === tag_to_search).value)
     .map((value, key) => ({ value: key, device_list: value }))
     .value();
 
   // Call a new function for each group in assynchronous way.
   await Promise.all(
     grouped_device_list.map((group) =>
-      calculateUserTransactions(
-        account,
-        storage,
-        group.value.replace(/ /g, ""),
-        group.device_list
-      )
+      calculateUserTransactions(account, storage, group.value.replace(/ /g, ""), group.device_list)
     )
   );
 }

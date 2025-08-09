@@ -35,28 +35,32 @@ from tagoio_sdk.modules.Account.Device_Type import DeviceCreateInfo
 
 def add_configuration_parameter_to_device(account: Account, device_id: str) -> None:
     account.devices.paramSet(
-        deviceID=device_id, configObj={ "key": "param_key", "value": "10", "sent": False }
+        deviceID=device_id, configObj={"key": "param_key", "value": "10", "sent": False}
     )
 
 
 def send_feedback_to_dashboard(account: Account, device_id: str) -> None:
     dashboard_token = getTokenByName(account=account, deviceID=device_id)
-    device = Device(params={"token":dashboard_token})
+    device = Device(params={"token": dashboard_token})
 
     # To add any data to the device that was just created:
     # device.sendData({ "variable": "temperature", value: 17 })
 
     device.sendData(
-        data={"variable": "validation", "value": "Device successfully created!", "metadata": {"type": "success" } }
+        data={
+            "variable": "validation",
+            "value": "Device successfully created!",
+            "metadata": {"type": "success"},
+        }
     )
 
 
 def parse_new_device(scope: list[dict]) -> DeviceCreateInfo:
     # Get the variables sent by the widget/dashboard.
-    device_network = [obj for obj in scope if obj["variable"]  == "device_network"]
-    device_connector = [obj for obj in scope if obj["variable"]  == "device_connector"]
-    device_name = [obj for obj in scope if obj["variable"]  == "device_name"]
-    device_eui = [obj for obj in scope if obj["variable"]  == "device_eui"]
+    device_network = [obj for obj in scope if obj["variable"] == "device_network"]
+    device_connector = [obj for obj in scope if obj["variable"] == "device_connector"]
+    device_name = [obj for obj in scope if obj["variable"] == "device_name"]
+    device_eui = [obj for obj in scope if obj["variable"] == "device_eui"]
 
     if not device_network or not device_network[0]["value"]:
         raise TypeError('Missing "device_network" in the data scope.')
@@ -70,15 +74,15 @@ def parse_new_device(scope: list[dict]) -> DeviceCreateInfo:
         "serie_number": device_eui[0]["value"],
         "tags": [
             # You can add custom tags here.
-            { "key": "type", "value": "sensor" },
-            { "key": "device_eui", "value": device_eui[0]["value"] },
+            {"key": "type", "value": "sensor"},
+            {"key": "device_eui", "value": device_eui[0]["value"]},
         ],
         "connector": device_connector[0]["value"],
         "network": device_network[0]["value"],
         "active": True,
         "type": "immutable",
-        "chunk_period": "month", # consider change
-        "chunk_retention": 1, # consider change
+        "chunk_period": "month",  # consider change
+        "chunk_retention": 1,  # consider change
     }
 
 
@@ -87,7 +91,12 @@ def start_analysis(context: list[dict], scope: list[dict]) -> None:
         return print("The analysis must be triggered by a widget.")
 
     # reads the value of account_token from the environment variable
-    account_token = list(filter(lambda account_token: account_token["key"] == "account_token", context.environment))
+    account_token = list(
+        filter(
+            lambda account_token: account_token["key"] == "account_token",
+            context.environment,
+        )
+    )
     account_token = account_token[0]["value"]
 
     if not account_token:
@@ -100,7 +109,9 @@ def start_analysis(context: list[dict], scope: list[dict]) -> None:
     result = account.devices.create(deviceObj=new_device)
     print(result)
 
-    add_configuration_parameter_to_device(account=account, device_id=result["device_id"])
+    add_configuration_parameter_to_device(
+        account=account, device_id=result["device_id"]
+    )
 
     send_feedback_to_dashboard(account=account, device_id=scope[0]["device"])
 

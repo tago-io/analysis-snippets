@@ -21,6 +21,7 @@ Steps to generate an account_token:
 4 - Generate a new Token with Expires Never.
 5 - Press the Copy Button and place at the Environment Variables tab of this analysis.
 """
+
 from queue import Queue
 from datetime import datetime
 

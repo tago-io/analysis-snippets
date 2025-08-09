@@ -15,6 +15,7 @@ To do that, go to your device, then token and copy your token.
 Go the the analysis, then environment variables,
 type device_token on key, and paste your token on value
 """
+
 from tagoio_sdk import Analysis, Device
 
 

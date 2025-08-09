@@ -19,7 +19,6 @@
 const { Analysis, Resources } = require("@tago-io/sdk");
 
 async function startAnalysis(context) {
-
   // Example of filtering devices by tag.
   // to use this filter, just remove the comment on the line 35
   const filter = {

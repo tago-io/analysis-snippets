@@ -32,6 +32,7 @@ Steps to generate an account_token:
 4 - Generate a new Token with Expires Never.
 5 - Press the Copy Button and place at the Environment Variables tab of this analysis.
 """
+
 from datetime import datetime
 
 from tagoio_sdk import Account, Analysis, Services
@@ -64,12 +65,14 @@ def my_analysis(context, scope: list = None):
     # You can remove the comments on line 51 and 57 to use the Tag Filter.
     # filter = {'tags': [{'key': env['tag_key'], 'value': env['tag_value']}]}
 
-    devices = account.devices.listDevice(queryObj={
-        "page": 1,
-        "amount": 1000,
-        "fields": ["id", "name", "last_input"],
-        # "filter": filter,
-    })
+    devices = account.devices.listDevice(
+        queryObj={
+            "page": 1,
+            "amount": 1000,
+            "fields": ["id", "name", "last_input"],
+            # "filter": filter,
+        }
+    )
 
     if not devices:
         return print(
@@ -101,21 +104,25 @@ def my_analysis(context, scope: list = None):
         # Remove space in the string
         emails = env["email_list"].replace(" ", "")
 
-        email_service.send(email={
-            "to": emails,
-            "subject": "Device Offline Alert",
-            "message": message,
-        })
+        email_service.send(
+            email={
+                "to": emails,
+                "subject": "Device Offline Alert",
+                "message": message,
+            }
+        )
 
     if env.get("sms_list"):
         # Remove space in the string and convert to an Array.
         smsNumbers = env["sms_list"].replace(" ", "").split(",")
 
         for phone in smsNumbers:
-            sms_service.send(sms={
-                "to": phone,
-                "message": message,
-            })
+            sms_service.send(
+                sms={
+                    "to": phone,
+                    "message": message,
+                }
+            )
 
 
 # The analysis token in only necessary to run the analysis outside TagoIO

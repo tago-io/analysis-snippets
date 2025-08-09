@@ -21,6 +21,7 @@ To do that, go to your account settings, then token and copy your token.
 Go the the analysis, then environment variables,
 type account_token on key, and paste your token on value
 """
+
 from tagoio_sdk import Analysis, Account, Device
 from tagoio_sdk.modules.Utils.getTokenByName import getTokenByName
 

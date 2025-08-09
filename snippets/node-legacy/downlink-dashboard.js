@@ -1,6 +1,7 @@
 // @title: Downlink from Dashboard
 // @description: Send downlink messages to devices triggered from dashboard
 // @tags: downlink, dashboard, device, communication, control
+
 /*
  ** Analysis Example
  ** Sending downlink using dashboard
@@ -59,7 +60,9 @@ async function startAnalysis(context, scope) {
   // Otherwise it will get from the environment variable.
   const device_id = payload.device;
   if (!device_id) {
-    return context.log("Device key <device> not found in the variables sent by the widget/dashboard.");
+    return context.log(
+      "Device key <device> not found in the variables sent by the widget/dashboard."
+    );
   }
 
   const resources = new Resources(context.token);

@@ -1,6 +1,7 @@
 // @title: Dynamic Last Value Configuration
 // @description: Configuration parameters for dynamic last value displays
 // @tags: configuration, dynamic, last-value, parameters, display
+
 /*
  ** Analysis Example
  ** Configuration parameters for dynamic last value
@@ -15,18 +16,29 @@
  **  3 - Click the "Click to add a new permission" element and select "Device" with the rule "Access" with the field as "Any";
  **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
-const { Resources, Analysis } = require("@tago-io/sdk");
-const { queue } = require("async");
-const moment = require("moment-timezone");
+
+import { Resources, Analysis } from "jsr:@tago-io/sdk";
+import type { AnalysisConstructorParams, Data, TagoIODevice } from "jsr:@tago-io/sdk";
 
 // set the timezone to show up on dashboard. TagoIO may handle ISOString automatically in a future update.
 let timezone = "America/New_York";
 
-const getParam = (params, key) =>
+interface DeviceParam {
+  key: string;
+  value: string;
+  sent: boolean;
+}
+
+interface ProcessDevice extends TagoIODevice {
+  account?: any;
+}
+
+const getParam = (params: DeviceParam[], key: string): DeviceParam =>
   params.find((x) => x.key === key) || { key, value: "-", sent: false };
-async function applyDeviceCalculation({ id: deviceID, name }) {
-  const deviceInfoText = `${name}(${deviceID}`;
-  console.info(`Processing Device ${deviceInfoText})`);
+
+async function applyDeviceCalculation({ id: deviceID, name }: TagoIODevice): Promise<void> {
+  const deviceInfoText = `${name}(${deviceID})`;
+  console.info(`Processing Device ${deviceInfoText}`);
 
   // Get the temperature variable inside the device bucket.
   // notice it will get the last record at the time the analysis is running.
@@ -50,7 +62,16 @@ async function applyDeviceCalculation({ id: deviceID, name }) {
     // get the config. parameter with key last_record_time
     const lastRecordParam = getParam(deviceParams, "last_record_time");
 
-    const timeString = moment(temperature.time).tz(timezone).format("YYYY/MM/DD HH:mm A");
+    // Format time using built-in Date methods instead of moment
+    const timeString = new Date(temperature.time as string).toLocaleString("en-US", {
+      timeZone: timezone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
 
     // creates or edit the tempreature Param with the value of temperature.
     // creates or edit the last_record_time Param with the time of temperature.
@@ -62,14 +83,40 @@ async function applyDeviceCalculation({ id: deviceID, name }) {
   }
 }
 
-// scope is not used for Schedule action.
-async function startAnalysis(context, scope) {
-  // get timezone from the account
-  ({ timezone } = await Resources.account.info());
+// Simple queue implementation to process devices with concurrency control
+async function processDevicesWithQueue(
+  devices: TagoIODevice[],
+  concurrency: number = 5
+): Promise<void> {
+  const results: Promise<void>[] = [];
+  let index = 0;
 
-  // Create a queue, so we don't run on Throughput errors.
-  // The queue will make sure we check only 5 devices simultaneously.
-  const processQueue = queue(applyDeviceCalculation, 5);
+  async function processNext(): Promise<void> {
+    if (index >= devices.length) return;
+
+    const currentIndex = index++;
+    const device = devices[currentIndex];
+
+    await applyDeviceCalculation(device);
+
+    // Process next device
+    return processNext();
+  }
+
+  // Start initial batch of concurrent operations
+  for (let i = 0; i < Math.min(concurrency, devices.length); i++) {
+    results.push(processNext());
+  }
+
+  // Wait for all operations to complete
+  await Promise.all(results);
+}
+
+// scope is not used for Schedule action.
+async function startAnalysis(_context: AnalysisConstructorParams, _scope: Data[]): Promise<void> {
+  // get timezone from the account
+  const accountInfo = await Resources.account.info();
+  timezone = accountInfo.timezone || timezone;
 
   // fetch device list filtered by tags.
   // Device list always return an Array with DeviceInfo object.
@@ -81,9 +128,10 @@ async function startAnalysis(context, scope) {
     },
   });
 
-  deviceList.forEach((device) => processQueue.push({ ...device, account }));
+  // Process devices with concurrency control (5 devices simultaneously)
+  await processDevicesWithQueue(deviceList, 5);
 
-  // Wait for all queue to be processed
-  await processQueue.drain();
+  console.log("Finished processing all devices");
 }
+
 Analysis.use(startAnalysis);

@@ -20,16 +20,17 @@ You must setup the following Environment Variables:
 message - Your Message
 title - Your Title
 """
+
 from tagoio_sdk import Analysis
 from tagoio_sdk import Services
 from tagoio_sdk.modules.Account.Notification_Type import NotificationCreate
 
 
 def send_notification(token_profile: str, object: NotificationCreate) -> None:
-    """	Send Notification to Yourself
+    """Send Notification to Yourself
 
     Args:
-		object (NotificationCreate): Notification Object
+                object (NotificationCreate): Notification Object
     """
     notification = Services({"token": token_profile}).Notification
     notification.send(notification=object)

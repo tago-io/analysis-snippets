@@ -23,6 +23,7 @@ Create a Widget "Form" and enter the variable 'push_payload' for the device you 
 In User Control, select this Analysis in the Analysis Option.
 Save and use the form.
 """
+
 from tagoio_sdk import Analysis, Services
 
 

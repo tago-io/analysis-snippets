@@ -1,6 +1,7 @@
 // @title: Find and Operate Data
 // @description: Find and operate data from devices using filtering and manipulation
 // @tags: data, find, filter, operation, device
+
 /*
  * Analysis Example
  * Operate data from devices
@@ -46,9 +47,7 @@ async function startAnalysis(context) {
   const time = resultArray[0].time;
 
   // print to the console at TagoIO
-  context.log(
-    `The last record of the water_level is ${value}. It was inserted at ${time}`
-  );
+  context.log(`The last record of the water_level is ${value}. It was inserted at ${time}`);
 
   // Multiplies the water_level value by 2 and inserts it in another variable
   const obj_to_save = {

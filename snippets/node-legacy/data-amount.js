@@ -5,13 +5,13 @@
  * TagoIO - Analysis Example
  * Device Data Amount Analysis
  *
- * This analysis retrieves the amount of data for each device and logs into the console 
+ * This analysis retrieves the amount of data for each device and logs into the console
  * the top 20 devices with the highest data amount.
- * 
+ *
  * Requirements:
  * - Access Policy must have permission to list devices (Device -> Access)
  * - Access Policy must have permission to get device data (Device -> Get Data)
- * 
+ *
  * Check out the SDK documentation on: https://js.sdk.tago.io
  * Create Access Policy at https://admin.tago.io/am
  *
@@ -28,7 +28,7 @@ const { queue } = require("async");
 async function myAnalysis(context, scope) {
   const resultList = [];
   const getDeviceAmount = async (deviceObj) => {
-    const result = await  Resources.devices.amount(deviceObj.id).catch(console.log);
+    const result = await Resources.devices.amount(deviceObj.id).catch(console.log);
     if (!result) {
       // 0 data or error
       return;
@@ -39,21 +39,21 @@ async function myAnalysis(context, scope) {
     // if (result < 40000) {
     //   return;
     // }
-  
+
     resultList.push({ name: deviceObj.name, id: deviceObj.id, amount: result });
     await new Promise((resolve) => setTimeout(resolve, 200)); // sleep
-  }
+  };
 
   const filter = {
     // type: "mutable"
     // type: "immutable"
     // tags: [{ key: "my_tag_key", value: "my_tag_value" }]
-  }
+  };
 
   // Create a queue to limit the amount of devices being processed at the same time
   const amountQueue = queue(getDeviceAmount, 5);
   amountQueue.error((error) => console.log(error));
-  
+
   const deviceList = Resources.devices.listStreaming({ filter });
   for await (const device of deviceList) {
     void amountQueue.push(device);
@@ -69,10 +69,10 @@ async function myAnalysis(context, scope) {
   setInterval(() => {
     console.log(`Devices in queue: ${amountQueue.length()}`);
   }, 10000);
-  
+
   // wait for all devices to be processed
   await amountQueue.drain();
-  
+
   // Reorder resultList by the highest data amount
   resultList.sort((a, b) => b.amount - a.amount);
 
