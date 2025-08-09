@@ -3,16 +3,16 @@
 This repository hosts code snippets for the TagoIO Analysis system. The frontend can fetch per-runtime JSON files and individual code files from GitHub Pages:
 
 **JSON Metadata Files:**
-- http://snippets.tago.io/node-legacy.json
-- http://snippets.tago.io/deno-2025-08-01.json
-- http://snippets.tago.io/python-legacy.json
-- http://snippets.tago.io/python-2025-08-01.json
+- https://snippets.tago.io/node-legacy.json
+- https://snippets.tago.io/deno-2025-08-01.json
+- https://snippets.tago.io/python-legacy.json
+- https://snippets.tago.io/python-2025-08-01.json
 
 **Individual Code Files:**
-- http://snippets.tago.io/node-legacy/{filename}
-- http://snippets.tago.io/deno-2025-08-01/{filename}
-- http://snippets.tago.io/python-legacy/{filename}
-- http://snippets.tago.io/python-2025-08-01/{filename}
+- https://snippets.tago.io/node-legacy/{filename}
+- https://snippets.tago.io/deno-2025-08-01/{filename}
+- https://snippets.tago.io/python-legacy/{filename}
+- https://snippets.tago.io/python-2025-08-01/{filename}
 
 The JSON files contain metadata only. The actual code is served as individual files from the `{runtime}/` directories.
 
@@ -70,4 +70,4 @@ Outputs will be written to `dist/*.json` and `dist/{runtime}/`.
 
 ## GitHub Pages deployment
 
-A GitHub Actions workflow is included to build and deploy the JSON files and code files to GitHub Pages on each push to `main`. The files will be available at `http://snippets.tago.io/node-legacy.json` and `http://snippets.tago.io/node-legacy/hello-world.js`.
+A GitHub Actions workflow is included to build and deploy the JSON files and code files to GitHub Pages on each push to `main`. The files will be available at `https://snippets.tago.io/node-legacy.json` and `https://snippets.tago.io/node-legacy/hello-world.js`.

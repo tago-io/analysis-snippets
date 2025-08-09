@@ -377,9 +377,9 @@ async function generateIndexHtml(): Promise<void> {
 
         <div class="curl-info">
             <strong>💡 Terminal Usage Examples:</strong><br>
-            <code>curl -s http://snippets.tago.io/deno-2025-08-01.json | jq .</code> - Get metadata<br>
-            <code>curl -s http://snippets.tago.io/deno-2025-08-01/console.ts</code> - Get code file<br>
-            <code>wget -r -np -R "index.html*" http://snippets.tago.io/</code> - Download all files
+            <code>curl -s https://snippets.tago.io/deno-2025-08-01.json | jq .</code> - Get metadata<br>
+            <code>curl -s https://snippets.tago.io/deno-2025-08-01/console.ts</code> - Get code file<br>
+            <code>wget -r -np -R "index.html*" https://snippets.tago.io/</code> - Download all files
         </div>
 
         <table>
