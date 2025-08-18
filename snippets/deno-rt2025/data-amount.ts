@@ -20,67 +20,19 @@
 
 import { Analysis, Resources } from "jsr:@tago-io/sdk";
 import type { TagoContext, Data, DeviceListItem } from "jsr:@tago-io/sdk";
+import { queue } from "npm:async";
 
-// Simple async queue implementation to replace the async library
-class AsyncQueue {
-  private tasks: (() => Promise<void>)[] = [];
-  private running: Promise<void>[] = [];
-  private concurrency: number;
-  private errorCallback?: (error: Error) => void;
-
-  constructor(concurrency: number = 5) {
-    this.concurrency = concurrency;
-  }
-
-  push(task: () => Promise<void>): void {
-    this.tasks.push(task);
-    this.process();
-  }
-
-  private process(): void {
-    while (this.tasks.length > 0 && this.running.length < this.concurrency) {
-      const task = this.tasks.shift();
-      if (task) {
-        const promise = task().catch((error) => {
-          if (this.errorCallback) {
-            this.errorCallback(error as Error);
-          }
-        }).finally(() => {
-          const index = this.running.indexOf(promise);
-          if (index > -1) {
-            this.running.splice(index, 1);
-          }
-        });
-        this.running.push(promise);
-      }
-    }
-  }
-
-  error(callback: (error: Error) => void): void {
-    this.errorCallback = callback;
-  }
-
-  idle(): boolean {
-    return this.tasks.length === 0 && this.running.length === 0;
-  }
-
-  length(): number {
-    return this.tasks.length;
-  }
-
-  async drain(): Promise<void> {
-    while (!this.idle()) {
-      await Promise.all(this.running);
-      await new Promise(resolve => setTimeout(resolve, 100)); // Small delay to allow new tasks
-    }
-  }
+interface DeviceResult {
+  name: string;
+  id: string;
+  amount: number;
 }
 
 /**
  * This is the main function that will be called when the analysis is executed
  */
 async function myAnalysis(_context: TagoContext, _scope: Data[]): Promise<void> {
-  const resultList: { name: string; id: string; amount: number }[] = [];
+  const resultList: DeviceResult[] = [];
 
   const getDeviceAmount = async (deviceObj: DeviceListItem): Promise<void> => {
     const result = await Resources.devices.amount(deviceObj.id).catch(console.log);
@@ -106,17 +58,15 @@ async function myAnalysis(_context: TagoContext, _scope: Data[]): Promise<void> 
   };
 
   // Create a queue to limit the amount of devices being processed at the same time
-  const amountQueue = new AsyncQueue(5);
-  amountQueue.error((error) => console.log(error));
+  const amountQueue = queue(getDeviceAmount, 5);
+  amountQueue.error((error: unknown) => console.log(error));
 
   const deviceList = Resources.devices.listStreaming({ filter });
-  for await (const devices of deviceList) {
-    for (const device of devices) {
-      amountQueue.push(() => getDeviceAmount(device as DeviceListItem));
-    }
+  for await (const device of deviceList) {
+    void amountQueue.push(device);
   }
 
-  // stop if queue is empty (fix: should be resultList.length not resultList.length())
+  // stop if queue is empty
   if (amountQueue.idle() && resultList.length === 0) {
     console.error("No devices found to process");
     return;
