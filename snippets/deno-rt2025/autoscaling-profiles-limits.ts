@@ -41,32 +41,11 @@
  */
 
 import { Analysis, Account, Utils } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams } from "jsr:@tago-io/sdk";
-
-interface ServiceValue {
-  amount: number;
-}
-
-interface ServiceLimit {
-  limit: number;
-}
-
-interface ServiceLimits {
-  [key: string]: number;
-}
-
-interface AccountLimit {
-  [key: string]: ServiceLimit;
-}
-
-interface AutoScaleServices {
-  [key: string]: ServiceLimit;
-}
-
-interface Environment {
-  account_token: string;
-  [key: string]: string;
-}
+import type { 
+  AnalysisEnvironment, 
+  TagoContext, 
+  BillingPrices
+} from "jsr:@tago-io/sdk";
 
 /**
  * Check if service needs autoscaling
@@ -86,7 +65,7 @@ function checkAutoScale(currentUsage: number, allocated: number, scale: number):
 /**
  *  Get next valid service limit
  */
-function getNextTier(serviceValues: ServiceValue[], accountLimit: number): number | undefined {
+function getNextTier(serviceValues: { amount: number }[], accountLimit: number): number | undefined {
   if (!accountLimit) {
     return undefined;
   }
@@ -100,9 +79,9 @@ function getNextTier(serviceValues: ServiceValue[], accountLimit: number): numbe
 /**
  * Parses the current limit of the account
  */
-function getAccountLimit(servicesLimit: Record<string, any>): AccountLimit {
-  return Object.keys(servicesLimit).reduce((result: AccountLimit, key) => {
-    result[key] = servicesLimit[key];
+function getAccountLimit(servicesLimit: Record<string, unknown>): Record<string, { limit: number }> {
+  return Object.keys(servicesLimit).reduce((result: Record<string, { limit: number }>, key) => {
+    result[key] = servicesLimit[key] as { limit: number };
 
     return result;
   }, {});
@@ -115,7 +94,9 @@ async function getProfileIDByToken(account: Account, token: string): Promise<str
   const profiles = await account.profiles.list();
   for (const profile of profiles) {
     const [token_exist] = await account.profiles.tokenList(profile.id, {
-      token,
+      filter: {
+        token
+      }
     });
     if (token_exist) {
       return profile.id;
@@ -128,13 +109,13 @@ async function getProfileIDByToken(account: Account, token: string): Promise<str
  * Calculate services to be scaled
  */
 function calculateAutoScale(
-  prices: Record<string, ServiceValue[]>,
-  profileLimit: ServiceLimits,
-  profileLimitUsed: ServiceLimits,
-  accountLimit: AccountLimit,
-  environment: Environment
-): AutoScaleServices | null {
-  const autoScaleServices: AutoScaleServices = {};
+  prices: Record<string, { amount: number }[]>,
+  profileLimit: Record<string, number>,
+  profileLimitUsed: Record<string, number>,
+  accountLimit: Record<string, { limit: number }>,
+  environment: AnalysisEnvironment
+): Record<string, { limit: number }> | null {
+  const autoScaleServices: Record<string, { limit: number }> = {};
   for (const statisticKey in profileLimit) {
     if (!environment[statisticKey]) {
       continue;
@@ -177,9 +158,9 @@ function calculateAutoScale(
 }
 
 function reallocateProfiles(
-  accountLimit: AccountLimit,
-  autoScaleServices: AutoScaleServices,
-  profileAllocation: ServiceLimits
+  accountLimit: Record<string, { limit: number }>,
+  autoScaleServices: Record<string, { limit: number }>,
+  profileAllocation: Record<string, number>
 ): Record<string, number> | null {
   const newAllocation: Record<string, number> = {};
 
@@ -208,8 +189,8 @@ function reallocateProfiles(
 /**
  * Get the environment variables and parses it to a JSON
  */
-function setupEnvironment(context: AnalysisConstructorParams): Environment {
-  const environment = Utils.envToJson(context.environment) as Environment;
+function setupEnvironment(context: TagoContext): AnalysisEnvironment {
+  const environment = Utils.envToJson(context.environment) as AnalysisEnvironment;
   if (!environment) {
     throw new Error("Environment variables not found");
   }
@@ -222,7 +203,7 @@ function setupEnvironment(context: AnalysisConstructorParams): Environment {
 }
 
 // This function will run when you execute your analysis
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   const environment = setupEnvironment(context);
 
   // Setup the account and get's the ID of the profile the account token belongs to.
@@ -240,13 +221,33 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   const { limit, limit_used } = await account.profiles.summary(id);
 
   // get the tiers of all services, so we know the next tier for our limits.
-  const billing = await account.billing.getPrices();
+  const billingPrices: BillingPrices = await account.billing.getPrices();
+
+  // Transform billing data to the format expected by calculateAutoScale
+  const billing: Record<string, { amount: number }[]> = {};
+  if (billingPrices && typeof billingPrices === 'object') {
+    Object.entries(billingPrices).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        billing[key] = value.map((item: unknown) => ({
+          amount: typeof item === 'object' && item !== null && 'price' in item 
+            ? (item as { price: number }).price 
+            : typeof item === 'object' && item !== null && 'amount' in item
+            ? (item as { amount: number }).amount 
+            : 0
+        }));
+      }
+    });
+  }
 
   // Check each service to see if it needs scaling
+  // Extract the limits from the ProfileLimit objects
+  const profileLimits = (limit as { limits?: Record<string, number> })?.limits || (limit as unknown as Record<string, number>);
+  const profileLimitsUsed = (limit_used as { limits?: Record<string, number> })?.limits || (limit_used as unknown as Record<string, number>);
+  
   const autoScaleServices = calculateAutoScale(
     billing,
-    limit,
-    limit_used,
+    profileLimits,
+    profileLimitsUsed,
     accountLimit,
     environment
   );
@@ -265,11 +266,12 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   }
 
   // Update our subscription, so we are actually scaling the account.
-  const billing_success = await account.billing.editSubscription({
-    services: autoScaleServices,
-  });
-
-  if (!billing_success) {
+  try {
+    await account.billing.editSubscription({
+      services: autoScaleServices,
+    });
+  } catch (error) {
+    console.error('Failed to update subscription:', error);
     return;
   }
 
@@ -282,12 +284,12 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
     });
 
     // Make sure we reallocate only what we just subscribed
-    const amountToReallocate = reallocateProfiles(accountLimit, autoScaleServices, limit);
+    const amountToReallocate = reallocateProfiles(accountLimit, autoScaleServices, profileLimits);
 
     console.info("New allocation:");
     if (amountToReallocate) {
       for (const service in amountToReallocate) {
-        console.info(`${service} from ${limit?.[service]} to ${amountToReallocate?.[service]}`);
+        console.info(`${service} from ${profileLimits?.[service]} to ${amountToReallocate?.[service]}`);
       }
 
       // Allocate all the subscribed limit to the profile.

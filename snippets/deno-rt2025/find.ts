@@ -17,10 +17,10 @@
  */
 
 import { Analysis, Device, Utils } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data, DataQuery } from "jsr:@tago-io/sdk";
+import type { TagoContext, DataQuery } from "jsr:@tago-io/sdk";
 
 // The function startAnalysis will run when you execute your analysis
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   // reads the values from the environment and saves it in the variable env_vars
   const env_vars = Utils.envToJson(context.environment);
 
@@ -32,7 +32,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
 
   // create the filter options to get the data from TagoIO
   const filter: DataQuery = {
-    variable: "water_level",
+    variables: "water_level",
     query: "last_item",
   };
 
@@ -51,7 +51,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   context.log(`The last record of the water_level is ${value}. It was inserted at ${time}`);
 
   // Multiplies the water_level value by 2 and inserts it in another variable
-  const obj_to_save: Data = {
+  const obj_to_save = {
     variable: "water_level_double",
     value: (value as number) * 2,
   };

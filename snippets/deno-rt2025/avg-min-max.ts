@@ -17,10 +17,10 @@
  */
 
 import { Analysis, Device, Utils } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data, DataQuery } from "jsr:@tago-io/sdk";
+import type { TagoContext, DataCreate, DataQuery } from "jsr:@tago-io/sdk";
 
 // The function myAnalysis will run when you execute your analysis
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   // reads the values from the environment and saves it in the variable env_vars
   const env_vars = Utils.envToJson(context.environment);
   if (!env_vars.device_token) {
@@ -31,7 +31,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
 
   // This is a filter to get the minimum value of the variable temperature in the last day
   const minFilter: DataQuery = {
-    variable: "temperature",
+    variables: "temperature",
     query: "min",
     start_date: "1 day",
   };
@@ -41,7 +41,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   // if so, we crete a new object to send to TagoIO
   const [min] = await device.getData(minFilter);
   if (min) {
-    const minValue: Data = {
+    const minValue: DataCreate = {
       variable: "temperature_minimum",
       value: min.value,
       unit: "F",
@@ -55,7 +55,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
 
   // This is a filter to get the maximum value of the variable temperature in the last day
   const maxFilter: DataQuery = {
-    variable: "temperature",
+    variables: "temperature",
     query: "max",
     start_date: "1 day",
   };
@@ -63,7 +63,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   const [max] = await device.getData(maxFilter);
 
   if (max) {
-    const maxValue: Data = {
+    const maxValue: DataCreate = {
       variable: "temperature_maximum",
       value: max.value,
       unit: "F",
@@ -76,7 +76,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
 
   // This is a filter to get the last 1000 values of the variable temperature in the last day
   const avgFilter: DataQuery = {
-    variable: "temperature",
+    variables: "temperature",
     qty: 1000,
     start_date: "1 day",
   };
@@ -90,7 +90,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
 
     temperatureSum = temperatureSum / dataAvgArray.length;
 
-    const avgValue: Data = {
+    const avgValue: DataCreate = {
       variable: "temperature_average",
       value: temperatureSum,
       unit: "F",

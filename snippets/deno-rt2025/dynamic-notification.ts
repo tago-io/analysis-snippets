@@ -21,15 +21,9 @@
  */
 
 import { Analysis, Services, Resources } from "jsr:@tago-io/sdk";
-import type {
-  AnalysisConstructorParams,
-  Data,
-  EmailData,
-  SMSData,
-  RunUserNotificationCreate,
-} from "jsr:@tago-io/sdk";
+import type { TagoContext, Data} from "jsr:@tago-io/sdk";
 
-async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
+async function startAnalysis(context: TagoContext, scope: Data[]): Promise<void> {
   if (!scope[0]) {
     return context.log("This analysis must be triggered by an action.");
   }
@@ -64,7 +58,7 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
 
   // Send the notifications and output the results to the analysis console.
   if (email_tag) {
-    const emailData: EmailData = {
+    const emailData = {
       to: email_tag.value,
       subject: "Notification alert",
       message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
@@ -79,7 +73,7 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
   }
 
   if (phone_tag) {
-    const smsData: SMSData = {
+    const smsData = {
       to: phone_tag.value,
       message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
     };
@@ -93,7 +87,7 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
   }
 
   if (userID_tag) {
-    const notificationData: RunUserNotificationCreate = {
+    const notificationData = {
       title: "Notification Alert",
       message: `You received a notification for the device: ${device_name}. Variable: ${scope[0].variable}, Value: ${scope[0].value}`,
     };

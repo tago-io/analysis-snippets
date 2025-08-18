@@ -28,9 +28,9 @@
 
 import { Analysis, Services, Utils, Resources } from "jsr:@tago-io/sdk";
 import dayjs from "npm:dayjs";
-import type { AnalysisConstructorParams, DeviceQuery, EmailData, SMSData } from "jsr:@tago-io/sdk";
+import type { TagoContext, DeviceQuery } from "jsr:@tago-io/sdk";
 
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   // Transform all Environment Variable to JSON.
   const env = Utils.envToJson(context.environment);
 
@@ -71,6 +71,9 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   const alert_devices: string[] = [];
 
   for (const device of devices) {
+    if (!device.last_input) {
+      continue;
+    }
     const last_input = dayjs(new Date(device.last_input));
 
     // Check the difference in minutes.
@@ -96,7 +99,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
     // Remove space in the string
     const emails = env.email_list.replace(/ /g, "");
 
-    const emailData: EmailData = {
+    const emailData = {
       to: emails,
       subject: "Device Offline Alert",
       message,
@@ -110,7 +113,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
     const smsNumbers = env.sms_list.replace(/ /g, "").split(",");
 
     for (const phone of smsNumbers) {
-      const smsData: SMSData = {
+      const smsData = {
         to: phone,
         message,
       };

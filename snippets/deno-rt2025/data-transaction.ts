@@ -25,19 +25,14 @@
  */
 
 import { Analysis, Account, Utils, Device } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, TagoIODevice, Data, DataQuery } from "jsr:@tago-io/sdk";
+import type { TagoContext, Data, DeviceListItem } from "jsr:@tago-io/sdk";
 import _ from "npm:lodash";
-
-interface GroupedDevices {
-  value: string;
-  device_list: TagoIODevice[];
-}
 
 async function calculateUserTransactions(
   account: Account,
   storage: Device,
   user_value: string,
-  device_list: TagoIODevice[]
+  device_list: DeviceListItem[]
 ): Promise<void> {
   // Collect the data amount for each device.
   // Result of bucket_results is:
@@ -45,7 +40,7 @@ async function calculateUserTransactions(
   const bucket_results = await Promise.all(
     device_list.map((device) => account.buckets.amount(device.bucket))
   );
-  const total_transactions = bucket_results.reduce((sum, amount) => sum + amount, 0);
+  const total_transactions = _.sum(bucket_results);
 
   // Get the total transactions of the last analysis run.
   // Group is used to get only for this user.
@@ -56,22 +51,20 @@ async function calculateUserTransactions(
   // const device_token = await Utils.getTokenByName(account, user_device.id);
   // const storage = new Device({ token: device_token });
 
-  const query: DataQuery = {
-    variable: "last_transactions",
+  let [last_total_transactions] = await storage.getData({
+    variables: ["last_transactions"],
     qty: 1,
-    group: user_value,
-  };
-
-  let [last_total_transactions] = await storage.getData(query);
+    groups: user_value,
+  });
   if (!last_total_transactions) {
-    last_total_transactions = { value: 0 } as Data;
+    last_total_transactions = { value: 0, time: new Date() } as Data;
   }
 
   const result = total_transactions - (last_total_transactions.value as number);
 
   // Store the current total of transactions, the result for this analysis run and the key.
   // Now you can just plot these variables in a dynamic table.
-  const dataToSend: Data[] = [
+  await storage.sendData([
     {
       variable: "last_transactions",
       value: total_transactions,
@@ -79,18 +72,16 @@ async function calculateUserTransactions(
     },
     { variable: "transactions_result", value: result, group: user_value },
     { variable: "user", value: user_value, group: user_value },
-  ];
-
-  await storage.sendData(dataToSend);
+  ]);
 }
 
-async function myAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function myAnalysis(context: TagoContext): Promise<void> {
   // Transform all Environment Variable to JSON.
   const environment = Utils.envToJson(context.environment);
   if (!environment.account_token) {
-    return context.log("You must setup an account_token in the Environment Variables.");
+    return console.log("You must setup an account_token in the Environment Variables.");
   } else if (!environment.device_token) {
-    return context.log("You must setup an device_token in the Environment Variables.");
+    return console.log("You must setup an device_token in the Environment Variables.");
   }
   // Instance the account class
   const account = new Account({ token: environment.account_token });
@@ -112,15 +103,14 @@ async function myAnalysis(context: AnalysisConstructorParams): Promise<void> {
     amount: 10000,
   });
 
-  // Group devices by tag value (using lodash instead of native implementation)
-  const grouped_device_list: GroupedDevices[] = _.chain(device_list)
-    .groupBy((collection) => collection.tags?.find((x) => x.key === tag_to_search)?.value)
-    .map((value, key) => ({ value: key, device_list: value }))
+  const grouped_device_list = _.chain(device_list)
+    .groupBy((collection: DeviceListItem) => collection.tags?.find((x: { key: string; value: string }) => x.key === tag_to_search)?.value)
+    .map((value: DeviceListItem[], key: string) => ({ value: key, device_list: value }))
     .value();
 
-  // Call a new function for each group in asynchronous way.
+  // Call a new function for each group in assynchronous way.
   await Promise.all(
-    grouped_device_list.map((group) =>
+    grouped_device_list.map((group: { value: string; device_list: DeviceListItem[] }) =>
       calculateUserTransactions(account, storage, group.value.replace(/ /g, ""), group.device_list)
     )
   );

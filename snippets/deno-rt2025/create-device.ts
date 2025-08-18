@@ -19,9 +19,9 @@
  */
 
 import { Analysis, Resources } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data } from "jsr:@tago-io/sdk";
+import type { TagoContext, Data, DeviceCreateInfo } from "jsr:@tago-io/sdk";
 
-async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
+async function startAnalysis(_context: TagoContext, scope: Data[]): Promise<void> {
   if (!scope[0]) {
     return console.log("The analysis must be triggered by a widget.");
   }
@@ -40,6 +40,8 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
     return console.log('Missing "device_network" in the data scope.');
   } else if (!device_eui || !device_eui.value) {
     return console.log('Missing "device_eui" in the data scope.');
+  } else if (!device_name || !device_name.value) {
+    return console.log('Missing "device_name" in the data scope.');
   }
 
   const deviceID = scope[0]?.device;
@@ -47,7 +49,7 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
     return console.log("Device ID not found in the data scope");
   }
 
-  const deviceCreateInfo: any = {
+  const deviceCreateInfo: DeviceCreateInfo = {
     name: device_name.value as string,
     // Serie number is the parameter for device eui, sigfox id, etc..
     serie_number: device_eui.value as string,

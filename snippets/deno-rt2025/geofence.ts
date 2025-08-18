@@ -19,7 +19,7 @@
  */
 
 import { Utils, Account, Analysis, Device, Services } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data } from "jsr:@tago-io/sdk";
+import type { TagoContext, Data, AnalysisEnvironment } from "jsr:@tago-io/sdk";
 
 interface Point {
   latitude: number;
@@ -28,18 +28,14 @@ interface Point {
 
 interface GeofenceLocation {
   type: "Polygon" | "Point";
-  coordinates: number[][];
+  coordinates: number[][] | number[];
   radius?: number;
 }
 
 interface Geofence {
   event: string;
   geolocation: GeofenceLocation;
-  [key: string]: any;
-}
-
-interface Environment {
-  account_token: string;
+  [key: string]: unknown;
 }
 
 // This function checks if our device is inside a polygon geofence
@@ -80,7 +76,7 @@ function checkZones(point: number[], geofence_list: Geofence[]): Geofence | unde
   const polygons = geofence_list.filter((x) => x.geolocation.type === "Polygon");
   if (polygons.length) {
     // Here we check if our device is inside any Polygon geofence using our function above.
-    const pass_check = polygons.map((x) => insidePolygon(point, x.geolocation.coordinates[0]));
+    const pass_check = polygons.map((x) => insidePolygon(point, x.geolocation.coordinates as number[][]));
     const index = pass_check.findIndex((x) => x === true);
     if (index !== -1) return polygons[index];
   }
@@ -92,8 +88,8 @@ function checkZones(point: number[], geofence_list: Geofence[]): Geofence | unde
       isPointWithinRadius(
         { latitude: point[1], longitude: point[0] },
         {
-          latitude: x.geolocation.coordinates[0],
-          longitude: x.geolocation.coordinates[1],
+          latitude: x.geolocation.coordinates[0] as number,
+          longitude: x.geolocation.coordinates[1] as number,
         },
         x.geolocation.radius || 100
       )
@@ -107,11 +103,11 @@ function checkZones(point: number[], geofence_list: Geofence[]): Geofence | unde
 // This function help us get the device using just its id.
 async function getDevice(account: Account, device_id: string): Promise<Device> {
   const customer_token = await Utils.getTokenByName(account, device_id);
-  const customer_dev = new Device({ token: customer_token });
+  const customer_dev = new Device({ token: customer_token as string });
   return customer_dev;
 }
 
-async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
+async function startAnalysis(context: TagoContext, scope: Data[]): Promise<void> {
   context.log("Running");
 
   if (!scope[0]) {
@@ -119,7 +115,7 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
   }
 
   // The code block below gets all environment variables and checks if we have the needed ones.
-  const environment = Utils.envToJson(context.environment) as Environment;
+  const environment = Utils.envToJson(context.environment) as AnalysisEnvironment;
   if (!environment.account_token) {
     throw new Error("Missing account_token environment var");
   }
@@ -138,9 +134,9 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
   if (!location || !location.location) return context.log("No location found in the scope.");
 
   // Now we check if we have any geofences to go through.
-  const geofences = await device.getData({ variable: "geofence", qty: 10 });
+  const geofences = await device.getData({ variables: "geofence", qty: 10 });
   const zones: Geofence[] = geofences.map((geofence) => geofence.metadata as Geofence);
-  const zone = checkZones([location.location.lng, location.location.lat], zones);
+  const zone = checkZones([location.location.coordinates[1], location.location.coordinates[0]], zones);
 
   // The line below starts our notification service.
   const notification = new Services({ token: context.token }).Notification;

@@ -18,25 +18,15 @@
  */
 
 import { Resources, Analysis } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data, TagoIODevice } from "jsr:@tago-io/sdk";
+import type { TagoContext, Data, ConfigurationParams } from "jsr:@tago-io/sdk";
 
 // set the timezone to show up on dashboard. TagoIO may handle ISOString automatically in a future update.
 let timezone = "America/New_York";
 
-interface DeviceParam {
-  key: string;
-  value: string;
-  sent: boolean;
-}
-
-interface ProcessDevice extends TagoIODevice {
-  account?: any;
-}
-
-const getParam = (params: DeviceParam[], key: string): DeviceParam =>
+const getParam = (params: ConfigurationParams[], key: string): ConfigurationParams =>
   params.find((x) => x.key === key) || { key, value: "-", sent: false };
 
-async function applyDeviceCalculation({ id: deviceID, name }: TagoIODevice): Promise<void> {
+async function applyDeviceCalculation({ id: deviceID, name }: { id: string, name: string }): Promise<void> {
   const deviceInfoText = `${name}(${deviceID})`;
   console.info(`Processing Device ${deviceInfoText}`);
 
@@ -63,7 +53,7 @@ async function applyDeviceCalculation({ id: deviceID, name }: TagoIODevice): Pro
     const lastRecordParam = getParam(deviceParams, "last_record_time");
 
     // Format time using built-in Date methods instead of moment
-    const timeString = new Date(temperature.time as string).toLocaleString("en-US", {
+    const timeString = new Date(temperature.time as unknown as string).toLocaleString("en-US", {
       timeZone: timezone,
       year: "numeric",
       month: "2-digit",
@@ -85,7 +75,7 @@ async function applyDeviceCalculation({ id: deviceID, name }: TagoIODevice): Pro
 
 // Simple queue implementation to process devices with concurrency control
 async function processDevicesWithQueue(
-  devices: TagoIODevice[],
+  devices: { id: string, name: string }[],
   concurrency: number = 5
 ): Promise<void> {
   const results: Promise<void>[] = [];
@@ -113,10 +103,12 @@ async function processDevicesWithQueue(
 }
 
 // scope is not used for Schedule action.
-async function startAnalysis(_context: AnalysisConstructorParams, _scope: Data[]): Promise<void> {
+async function startAnalysis(_context: TagoContext, _scope: Data[]): Promise<void> {
   // get timezone from the account
   const accountInfo = await Resources.account.info();
-  timezone = accountInfo.timezone || timezone;
+  if (accountInfo.timezone) {
+    timezone = accountInfo.timezone;
+  }
 
   // fetch device list filtered by tags.
   // Device list always return an Array with DeviceInfo object.
