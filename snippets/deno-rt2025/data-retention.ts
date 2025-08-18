@@ -16,11 +16,11 @@
  **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
 
-import { Analysis, Resources } from "jsr:@tago-io/sdk";
+import { Analysis, DeviceQuery, Resources, TagoContext } from "jsr:@tago-io/sdk";
 import dayjs from "npm:dayjs";
 
 // The function startAnalysis will run when you execute your analysis
-async function startAnalysis(context: any): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   // Bellow is an empty filter.
   // Examples of filter:
   // { tags: [{ key: 'tag-key', value: 'tag-value' }]}
@@ -29,7 +29,7 @@ async function startAnalysis(context: any): Promise<void> {
   // { bucket: 'bucket-id' }
   const filter = {};
 
-  const deviceQuery: any = {
+  const deviceQuery: DeviceQuery = {
     page: 1,
     fields: ["id"],
     filter,
@@ -43,7 +43,7 @@ async function startAnalysis(context: any): Promise<void> {
     const qty = 100; // remove 100 registers of each variable
     const end_date = dayjs().subtract(1, "month").toISOString(); // registers old than 1 month
 
-    const removeOptions: any = { variables, qty, end_date };
+    const removeOptions = { variables, qty, end_date };
 
     await Resources.devices
       .deleteDeviceData(deviceObj.id!, removeOptions)

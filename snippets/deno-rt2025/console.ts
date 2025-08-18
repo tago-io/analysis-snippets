@@ -13,10 +13,8 @@
  */
 
 import { Analysis } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data } from "jsr:@tago-io/sdk";
-
 // The function myAnalysis will run when you execute your analysis
-async function myAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
+function myAnalysis() {
   console.log("Hello World");
 }
 

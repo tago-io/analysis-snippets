@@ -21,10 +21,10 @@
  */
 
 import { Analysis, Device, Services, Utils } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, DataQuery, EmailData } from "jsr:@tago-io/sdk";
+import type { TagoContext, DataQuery } from "jsr:@tago-io/sdk";
 
 // The function myAnalysis will run when you execute your analysis
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   // reads the values from the environment and saves it in the variable env_vars
   const env_vars = Utils.envToJson(context.environment);
   if (!env_vars.device_token) {
@@ -38,7 +38,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   const device = new Device({ token: env_vars.device_token });
 
   // Get the 5 last records of the variable fuel_level in the device bucket.
-  const query: DataQuery = { variable: "fuel_level", qty: 5 };
+  const query: DataQuery = { variables: "fuel_level", qty: 5 };
   const fuel_list = await device.getData(query);
 
   // Create csv header
@@ -57,7 +57,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   const email = new Services({ token: context.token }).email;
 
   // Send the email.
-  const emailData: EmailData = {
+  const emailData = {
     message: "This is an example of a body message",
     subject: "Exported File from TagoIO",
     to: env_vars.email,

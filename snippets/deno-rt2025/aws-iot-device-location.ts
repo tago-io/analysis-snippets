@@ -7,156 +7,246 @@
  * AWS IoT Device Location Integration
  *
  * This analysis demonstrates how to integrate with AWS IoT Core Device Location service
- * to track and manage device locations.
+ * to estimate device location using GNSS, IP address, or WiFi access points data.
  *
  * Check out the SDK documentation on: https://js.sdk.tago.io
  *
  * Environment Variables needed:
- * - AWS_ACCESS_KEY_ID: Your AWS access key
- * - AWS_SECRET_ACCESS_KEY: Your AWS secret key
+ * - AWS_ACCESSKEYID: Your AWS access key ID
+ * - AWS_SECRETACCESSKEY: Your AWS secret access key
  * - AWS_REGION: AWS region (e.g., us-east-1)
- * - DEVICE_ID: Device ID to track location for
+ * - DESIREABLE_ACCURACY_PERCENT: Desired accuracy percentage (e.g., 80)
+ * - GNSS_SOLVER_VARIABLE: Variable name for GNSS data (default: gnss_solver)
+ * - IP_ADDRESS_VARIABLE: Variable name for IP address data (default: ip_addresses)
+ * - WIFI_ADDRESSES_VARIABLE: Variable name for WiFi addresses data (default: wifi_addresses)
  */
 
+import { GetPositionEstimateCommand, IoTWirelessClient } from "npm:@aws-sdk/client-iot-wireless";
 import { Analysis, Resources } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data } from "jsr:@tago-io/sdk";
+import type { Data, TagoContext } from "jsr:@tago-io/sdk";
 
-interface LocationData {
-  latitude: number;
-  longitude: number;
-  timestamp: string;
-  accuracy?: number;
-  deviceId: string;
+interface EstimatedConfiguration {
+  awsAccessKeyId: string;
+  awsSecretAccessKey: string;
+  awsRegion: string;
+  desireableAccuracyPercent: string;
 }
 
-interface AWSConfig {
-  accessKeyId: string;
-  secretAccessKey: string;
-  region: string;
+interface EstimatedLocationResponse {
+  type: string;
+  geometry: {
+    type: string;
+    coordinates: [number, number, number];
+  };
+  properties: {
+    HorizontalAccuracy: number;
+    VerticalAccuracy: number;
+  };
+}
+
+interface AWSPayload {
+  Timestamp: Date;
+  Gnss?: {
+    Payload: string;
+  };
+  Ip?: {
+    IpAddress: string;
+  };
+  WiFiAccessPoints?: Array<{
+    MacAddress: string;
+    Rss: number;
+  }>;
 }
 
 /**
- * Parse environment variables
+ * Parse environment variables to get configuration
  */
-function getAWSConfig(context: AnalysisConstructorParams): AWSConfig {
-  const envVars = context.environment;
+function _getConfiguration(context: TagoContext): EstimatedConfiguration {
+  const awsAccessKeyId = context.environment.find((x) => x.key === "AWS_ACCESSKEYID")?.value;
+  const awsSecretAccessKey = context.environment.find((x) => x.key === "AWS_SECRETACCESSKEY")?.value;
+  const awsRegion = context.environment.find((x) => x.key === "AWS_REGION")?.value;
+  const desireableAccuracyPercent = context.environment.find((x) => x.key === "DESIREABLE_ACCURACY_PERCENT")?.value;
 
-  const accessKeyId = envVars.find((env) => env.key === "AWS_ACCESS_KEY_ID")?.value;
-  const secretAccessKey = envVars.find((env) => env.key === "AWS_SECRET_ACCESS_KEY")?.value;
-  const region = envVars.find((env) => env.key === "AWS_REGION")?.value;
-
-  if (!accessKeyId || !secretAccessKey || !region) {
-    throw new Error("Missing required AWS environment variables");
+  if (!awsAccessKeyId) {
+    throw new Error("Missing AWS_ACCESSKEYID in environment variables");
+  }
+  if (!awsSecretAccessKey) {
+    throw new Error("Missing AWS_SECRETACCESSKEY in environment variables");
+  }
+  if (!awsRegion) {
+    throw new Error("Missing AWS_REGION in environment variables");
+  }
+  if (!desireableAccuracyPercent) {
+    throw new Error("Missing DESIREABLE_ACCURACY_PERCENT in environment variables");
   }
 
-  return { accessKeyId, secretAccessKey, region };
+  return {
+    awsAccessKeyId,
+    awsSecretAccessKey,
+    awsRegion,
+    desireableAccuracyPercent,
+  };
 }
 
 /**
- * Mock AWS IoT Device Location service call
- * In a real implementation, this would use AWS SDK
+ * Create AWS payload for position estimate command
  */
-async function getDeviceLocation(
-  config: AWSConfig,
-  deviceId: string
-): Promise<LocationData | null> {
-  try {
-    // This is a mock implementation
-    // In production, you would use the AWS SDK to call IoT Device Location service
-    console.log(`Fetching location for device ${deviceId} from AWS IoT`);
+function _createAWSPayload(gnssValue?: string, ipAddress?: string, wifiAddresses?: Record<string, number>): AWSPayload {
+  if (!gnssValue && !ipAddress && !wifiAddresses) {
+    throw new Error("No data to create the payload");
+  }
 
-    // Mock response - replace with actual AWS SDK calls
-    const mockLocation: LocationData = {
-      latitude: -23.55052,
-      longitude: -46.633308,
-      timestamp: new Date().toISOString(),
-      accuracy: 10.0,
-      deviceId: deviceId,
+  let payload: AWSPayload = { Timestamp: new Date() };
+
+  if (gnssValue) {
+    payload = { ...payload, Gnss: { Payload: gnssValue } };
+  }
+
+  if (ipAddress) {
+    payload = { ...payload, Ip: { IpAddress: ipAddress } };
+  }
+
+  if (wifiAddresses) {
+    const wifiKeys = Object.keys(wifiAddresses);
+    const wifiValues = Object.values(wifiAddresses);
+
+    if (wifiKeys.length < 2) {
+      throw new Error("Wifi Addresses must have at least 2 addresses");
+    }
+
+    payload = {
+      ...payload,
+      WiFiAccessPoints: [
+        {
+          MacAddress: wifiKeys[0],
+          Rss: wifiValues[0],
+        },
+        {
+          MacAddress: wifiKeys[1],
+          Rss: wifiValues[1],
+        },
+      ],
     };
-
-    return mockLocation;
-  } catch (error) {
-    console.error("Error fetching device location:", error);
-    return null;
   }
+
+  return payload;
 }
 
 /**
- * Store location data in TagoIO
+ * Extract estimated location from AWS response
  */
-async function storeLocationData(deviceId: string, locationData: LocationData): Promise<void> {
-  const dataToInsert: Data[] = [
-    {
-      variable: "latitude",
-      value: locationData.latitude,
-      time: locationData.timestamp,
-      metadata: {
-        source: "aws_iot_location",
-        accuracy: locationData.accuracy,
-      },
-    },
-    {
-      variable: "longitude",
-      value: locationData.longitude,
-      time: locationData.timestamp,
-      metadata: {
-        source: "aws_iot_location",
-        accuracy: locationData.accuracy,
-      },
-    },
-    {
-      variable: "location",
-      value: `${locationData.latitude}, ${locationData.longitude}`,
-      time: locationData.timestamp,
-      location: {
-        lat: locationData.latitude,
-        lng: locationData.longitude,
-      },
-      metadata: {
-        source: "aws_iot_location",
-        accuracy: locationData.accuracy,
-      },
-    },
-  ];
+function _getEstimatedLocation(response: { GeoJsonPayload?: { transformToString?: () => string } }): EstimatedLocationResponse {
+  if (!response) {
+    throw new Error("No response from AWS");
+  }
 
-  await Resources.devices.sendDeviceData(deviceId, dataToInsert);
-  console.log(`Stored location data for device ${deviceId}`);
+  const estimatedLocation = JSON.parse(
+    response.GeoJsonPayload?.transformToString?.() ?? ""
+  );
+
+  if (!estimatedLocation) {
+    throw new Error("No estimated location found");
+  }
+
+  return estimatedLocation;
 }
 
 /**
- * Main analysis function
+ * Create TagoIO data object from scope and estimated location
  */
-async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
+function _createDataForDevice(
+  scope: Data,
+  desireableAccuracy: string,
+  estimatedLocation: EstimatedLocationResponse
+): Data {
+  const [lng, lat] = estimatedLocation.geometry.coordinates;
+  const horizontalAccuracy = estimatedLocation.properties?.HorizontalAccuracy;
+  const verticalAccuracy = estimatedLocation.properties?.VerticalAccuracy;
+
+  const accuracy =
+    horizontalAccuracy >= parseFloat(desireableAccuracy) ||
+    verticalAccuracy >= parseFloat(desireableAccuracy);
+
+  const dataReturn: Data = {
+    variable: "estimated_location",
+    value: lat + ";" + lng,
+    location: {
+      coordinates: [lng, lat],
+      type: "Point",
+    },
+    metadata: {
+      horizontalAccuracy,
+      verticalAccuracy,
+      color: accuracy ? "green" : "red",
+    },
+    group: scope.group,
+    time: scope.time,
+    device: scope.device,
+    id: scope.id,
+  };
+
+  return dataReturn;
+}
+
+/**
+ * Main analysis function for AWS IoT Device Location
+ */
+async function getEstimatedDeviceLocation(context: TagoContext, scope: Data[]): Promise<void> {
+  console.log("Starting Analysis");
+
+  let configuration: EstimatedConfiguration;
   try {
-    // Get AWS configuration from environment variables
-    const awsConfig = getAWSConfig(context);
-
-    // Get device ID from environment or scope
-    const deviceIdEnv = context.environment.find((env) => env.key === "DEVICE_ID")?.value;
-    const deviceId = deviceIdEnv || scope[0]?.device;
-
-    if (!deviceId) {
-      console.error("No device ID provided in environment variables or scope");
-      return;
-    }
-
-    console.log(`Processing location update for device: ${deviceId}`);
-
-    // Fetch location from AWS IoT Device Location service
-    const locationData = await getDeviceLocation(awsConfig, deviceId);
-
-    if (!locationData) {
-      console.error("Failed to retrieve location data from AWS IoT");
-      return;
-    }
-
-    // Store the location data in TagoIO
-    await storeLocationData(deviceId, locationData);
-
-    console.log("Location data processing completed successfully");
+    configuration = _getConfiguration(context);
   } catch (error) {
-    console.error("Analysis execution failed:", error);
+    console.error((error as Error).message);
+    return;
+  }
+
+  // Get variable names from environment or use defaults
+  const gnssSolverVariable =
+    context.environment.find((x) => x.key === "GNSS_SOLVER_VARIABLE")?.value || "gnss_solver";
+  const ipAddressVariable =
+    context.environment.find((x) => x.key === "IP_ADDRESS_VARIABLE")?.value || "ip_addresses";
+  const wifiAdressesVariable =
+    context.environment.find((x) => x.key === "WIFI_ADDRESSES_VARIABLE")?.value || "wifi_addresses";
+
+  // Extract data from scope
+  const gnssValue = scope.find((x) => x.variable === gnssSolverVariable)?.value as string;
+  const ipAddressValue = scope.find((x) => x.variable === ipAddressVariable)?.value as string;
+  const ipAddress = ipAddressValue?.split(";");
+  const wifiAddresses = scope.find((x) => x.variable === wifiAdressesVariable)?.metadata as Record<string, number>;
+
+  try {
+    // Create payload for AWS position estimate
+    const payload = _createAWSPayload(gnssValue, ipAddress?.[0], wifiAddresses);
+
+    // Create AWS IoT Wireless client
+    const client = new IoTWirelessClient({
+      credentials: {
+        accessKeyId: configuration.awsAccessKeyId,
+        secretAccessKey: configuration.awsSecretAccessKey,
+      },
+      region: configuration.awsRegion,
+    });
+
+    // Send position estimate command
+    const command = new GetPositionEstimateCommand(payload);
+    const response = await client.send(command);
+
+    // Extract estimated location from response
+    const estimatedLocation = _getEstimatedLocation(response);
+
+    // Send data to TagoIO device
+    await Resources.devices.sendDeviceData(
+      scope[0].device,
+      _createDataForDevice(scope[0], configuration.desireableAccuracyPercent, estimatedLocation)
+    );
+
+    console.log("Analysis Finished");
+  } catch (error) {
+    console.error((error as Error).message);
   }
 }
 
-Analysis.use(startAnalysis);
+// Use analysis in production
+Analysis.use(getEstimatedDeviceLocation);

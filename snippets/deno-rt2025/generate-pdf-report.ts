@@ -15,19 +15,15 @@
  */
 
 import { Analysis, Device, Services, Utils } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data } from "jsr:@tago-io/sdk";
+import type { TagoContext, Data, AnalysisEnvironment } from "jsr:@tago-io/sdk";
+import dayjs from "npm:dayjs"
 
 const your_variable = "your_variable"; //enter the variable from your device you would like in the report
 
-interface EnvironmentVars {
-  email: string;
-  device_token: string;
-}
-
 // The function myAnalysis will run when you execute your analysis
-async function startAnalysis(context: AnalysisConstructorParams, _scope: Data[]): Promise<void> {
+async function startAnalysis(context: TagoContext, _scope: Data[]): Promise<void> {
   // reads the values from the environment and saves it in the variable envVars
-  const envVars = Utils.envToJson(context.environment) as EnvironmentVars;
+  const envVars = Utils.envToJson(context.environment) as AnalysisEnvironment;
 
   if (!envVars.email) {
     return context.log("email environment variable not found");
@@ -54,17 +50,6 @@ async function startAnalysis(context: AnalysisConstructorParams, _scope: Data[])
   const dataVar = dataArray[0];
   const dataVal = dataArray[1];
 
-  // Format current date/time
-  const currentDateTime = new Date().toLocaleString("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-
   const html = `<html>
     <head>
         <style>
@@ -86,7 +71,7 @@ async function startAnalysis(context: AnalysisConstructorParams, _scope: Data[])
     <body>
       <table>
         <tr>
-            <td colspan="7">Issue date: ${currentDateTime}</td>
+            <td colspan="7">Issue date: ${dayjs().format("YYYY-MM-DD HH:mm:ss")}</td>
         </tr>
         <tr>
             <td colspan="4">Start date: 2020-05-20 10:21:32</td>

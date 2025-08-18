@@ -16,21 +16,21 @@
  **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
 
-import type { AnalysisConstructorParams, DeviceQuery, TagoIODevice } from "jsr:@tago-io/sdk";
+import type { TagoContext, DeviceQuery } from "jsr:@tago-io/sdk";
 import { Analysis, Resources } from "jsr:@tago-io/sdk";
 
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(_context: TagoContext): Promise<void> {
   // Example of filtering devices by tag.
   // to use this filter, just remove the comment on the line 35
-  const filter = {
-    tags: [
-      {
-        key: "key_name", // change by your key name
-        value: "key_value", // change by your key value
-      },
-    ],
-    // You also can filter by: name, last_input, last_output, bucket, etc.
-  };
+  // const filter = {
+  //   tags: [
+  //     {
+  //       key: "key_name", // change by your key name
+  //       value: "key_value", // change by your key value
+  //     },
+  //   ],
+  //   // You also can filter by: name, last_input, last_output, bucket, etc.
+  // };
 
   // Searching all devices with tag we want
   const query: DeviceQuery = {
@@ -40,7 +40,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
     amount: 100,
   };
 
-  const devices: TagoIODevice[] = await Resources.devices.list(query);
+  const devices = await Resources.devices.list(query);
 
   if (!devices.length) {
     return console.debug("Devices not found");

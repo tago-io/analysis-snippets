@@ -14,7 +14,7 @@
  */
 
 import { Analysis } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams } from "jsr:@tago-io/sdk";
+import type { TagoContext } from "jsr:@tago-io/sdk";
 
 interface ApiResponse {
   result: {
@@ -22,7 +22,7 @@ interface ApiResponse {
   };
 }
 
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   const url = "https://api.tago.io/info";
   const headers = {
     Authorization: "Your-Account-Token",

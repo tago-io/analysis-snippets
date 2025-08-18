@@ -19,7 +19,7 @@
  */
 
 import { Analysis, Services } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data, MQTTPublishOptions } from "jsr:@tago-io/sdk";
+import type { TagoContext, Data } from "jsr:@tago-io/sdk";
 
 interface TemperatureData {
   variable: string;
@@ -27,7 +27,7 @@ interface TemperatureData {
   unit: string;
 }
 
-async function mqttPushExample(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
+async function mqttPushExample(context: TagoContext, scope: Data[]): Promise<void> {
   if (!scope.length) {
     return context.log("This analysis must be triggered by a dashboard.");
   }
@@ -49,7 +49,7 @@ async function mqttPushExample(context: AnalysisConstructorParams, scope: Data[]
   };
 
   // Create a object with the options you chooses
-  const options: MQTTPublishOptions = {
+  const options = {
     qos: 0,
   };
 

@@ -28,9 +28,9 @@
  */
 
 import { Analysis, Utils, Resources } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, Data, DownlinkOptions } from "jsr:@tago-io/sdk";
+import type { TagoContext, Data, DownlinkOptions } from "jsr:@tago-io/sdk";
 
-async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]): Promise<void> {
+async function startAnalysis(context: TagoContext, scope: Data[]): Promise<void> {
   // Remove code below if you want to trigger by schedule action and using environment variables.
   if (!scope[0]) {
     return context.log("This analysis must be triggered by a widget.");
@@ -74,7 +74,7 @@ async function startAnalysis(context: AnalysisConstructorParams, scope: Data[]):
 
   const downlinkOptions: DownlinkOptions = {
     payload: payload.value as string,
-    port: Number(port.value),
+    port: port.value as string,
     confirmed: false,
   };
 

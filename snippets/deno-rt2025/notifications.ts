@@ -3,7 +3,7 @@
 // @tags: notification, alert, dashboard, email
 
 import { Analysis, Services, Utils } from "jsr:@tago-io/sdk";
-import type { AnalysisConstructorParams, NotificationCreate } from "jsr:@tago-io/sdk";
+import type { TagoContext } from "jsr:@tago-io/sdk";
 
 /**
  * The main function used by Tago to run the script.
@@ -11,7 +11,7 @@ import type { AnalysisConstructorParams, NotificationCreate } from "jsr:@tago-io
  * Optional: You can set a dashboard_id using an environment variable
  * this will show a button on the notification to send the user directly to the dashboard
  */
-async function startAnalysis(context: AnalysisConstructorParams): Promise<void> {
+async function startAnalysis(context: TagoContext): Promise<void> {
   // reads the values from the environment variables and saves it in the variable env_vars
   const env_var = Utils.envToJson(context.environment);
 
@@ -24,7 +24,7 @@ async function startAnalysis(context: AnalysisConstructorParams): Promise<void> 
   const message = "Your message";
 
   try {
-    const notificationData: NotificationCreate = {
+    const notificationData = {
       message,
       title,
       ref_id: env_var.dashboard_id || undefined,
