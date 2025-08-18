@@ -18,7 +18,7 @@ TagoIO provides multiple runtime environments for Analysis scripts, each with di
 - **Dependencies**: Only pre-installed libraries available in the runtime context
 - **Limitations**: Older JavaScript features, limited module support, no dynamic dependency installation
 
-### Deno 2025-08-01 Runtime
+### Deno rt2025 Runtime
 - **Language**: TypeScript/JavaScript (modern)
 - **File Extensions**: `.ts`, `.tsx`, `.js`
 - **Environment**: Modern Deno runtime with full TypeScript support
@@ -39,7 +39,7 @@ TagoIO provides multiple runtime environments for Analysis scripts, each with di
 - **Dependencies**: Only pre-installed libraries available in the runtime context
 - **Libraries**: Standard Python library + select scientific packages (numpy, pandas, etc.)
 
-### Python 2025-08-01 Runtime
+### Python rt2025 Runtime
 - **Language**: Python 3.x (modern version)
 - **File Extensions**: `.py`
 - **Environment**: Updated Python runtime with latest features
@@ -124,9 +124,9 @@ deno task check
 Place your code file in the appropriate runtime directory:
 
 - `snippets/node-legacy/` - JavaScript files (.js, .cjs)
-- `snippets/deno-2025-08-01/` - TypeScript files (.ts, .tsx)
+- `snippets/deno-rt2025/` - TypeScript files (.ts, .tsx)
 - `snippets/python-legacy/` - Python files (.py)
-- `snippets/python-2025-08-01/` - Python files (.py)
+- `snippets/python-rt2025/` - Python files (.py)
 
 ### 2. Add Metadata via Comments
 
@@ -171,9 +171,9 @@ deno task generate
 ```
 snippets/
 ├── node-legacy/           # Node.js legacy runtime snippets
-├── deno-2025-08-01/      # Deno 2025-08-01 runtime snippets  
+├── deno-rt2025/      # Deno rt2025 runtime snippets  
 ├── python-legacy/         # Python legacy runtime snippets
-└── python-2025-08-01/    # Python 2025-08-01 runtime snippets
+└── python-rt2025/    # Python rt2025 runtime snippets
 
 tools/
 ├── generate.ts           # Deno-based JSON generator
@@ -181,13 +181,13 @@ tools/
 
 dist/                     # Generated files (auto-generated)
 ├── node-legacy.json      # Metadata for Node.js legacy runtime
-├── deno-2025-08-01.json  # Metadata for Deno 2025-08-01 runtime
+├── deno-rt2025.json  # Metadata for Deno rt2025 runtime
 ├── python-legacy.json   # Metadata for Python legacy runtime
-├── python-2025-08-01.json # Metadata for Python 2025-08-01 runtime
+├── python-rt2025.json # Metadata for Python rt2025 runtime
 ├── node-legacy/          # Clean code files for Node.js legacy
-├── deno-2025-08-01/     # Clean code files for Deno 2025-08-01
+├── deno-rt2025/     # Clean code files for Deno rt2025
 ├── python-legacy/       # Clean code files for Python legacy
-└── python-2025-08-01/   # Clean code files for Python 2025-08-01
+└── python-rt2025/   # Clean code files for Python rt2025
 ```
 
 ## JSON Schema
@@ -196,7 +196,7 @@ Generated JSON files follow this structure:
 
 ```json
 {
-  "runtime": "deno-2025-08-01",
+  "runtime": "deno-rt2025",
   "schema_version": 1,
   "generated_at": "2025-08-08T00:00:00.000Z",
   "snippets": [
@@ -207,7 +207,7 @@ Generated JSON files follow this structure:
       "language": "typescript",
       "tags": ["basic", "deno"],
       "filename": "hello-world.ts",
-      "file_path": "deno-2025-08-01/hello-world.ts"
+      "file_path": "deno-rt2025/hello-world.ts"
     }
   ]
 }

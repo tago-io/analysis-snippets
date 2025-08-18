@@ -4,13 +4,13 @@ const ROOT = resolve(new URL("../", import.meta.url).pathname);
 const SNIPPETS_DIR = join(ROOT, "snippets");
 const DIST_DIR = join(ROOT, "dist");
 
-const RUNTIME_DIRS = ["node-legacy", "deno-2025-08-01", "python-legacy", "python-2025-08-01"];
+const RUNTIME_DIRS = ["node-legacy", "deno-rt2025", "python-legacy", "python-rt2025"];
 
 const LANGUAGE_MAP: Record<string, string> = {
   "node-legacy": "javascript",
-  "deno-2025-08-01": "typescript",
+  "deno-rt2025": "typescript",
   "python-legacy": "python",
-  "python-2025-08-01": "python",
+  "python-rt2025": "python",
 };
 
 const SCHEMA_VERSION = 1;
@@ -185,7 +185,7 @@ function buildRuntimeJson(runtime: string): Omit<RuntimeJson, "snippets"> {
 
 async function generateIndexHtml(): Promise<void> {
   const indexPath = join(DIST_DIR, "index.html");
-  
+
   // Get information about all runtime directories and files
   const runtimeInfo: Array<{
     runtime: string;
@@ -377,8 +377,8 @@ async function generateIndexHtml(): Promise<void> {
 
         <div class="curl-info">
             <strong>💡 Terminal Usage Examples:</strong><br>
-            <code>curl -s https://snippets.tago.io/deno-2025-08-01.json | jq .</code> - Get metadata<br>
-            <code>curl -s https://snippets.tago.io/deno-2025-08-01/console.ts</code> - Get code file<br>
+            <code>curl -s https://snippets.tago.io/deno-rt2025.json | jq .</code> - Get metadata<br>
+            <code>curl -s https://snippets.tago.io/deno-rt2025/console.ts</code> - Get code file<br>
             <code>wget -r -np -R "index.html*" https://snippets.tago.io/</code> - Download all files
         </div>
 
@@ -409,8 +409,8 @@ async function generateIndexHtml(): Promise<void> {
   // Add JSON metadata files
   jsonFiles.sort((a, b) => a.name.localeCompare(b.name));
   for (const file of jsonFiles) {
-    const runtime = file.name.replace('.json', '');
-    const info = runtimeInfo.find(r => r.runtime === runtime);
+    const runtime = file.name.replace(".json", "");
+    const info = runtimeInfo.find((r) => r.runtime === runtime);
     tableRows += `
                 <tr>
                     <td class="icon">📄</td>
@@ -452,25 +452,25 @@ async function generateIndexHtml(): Promise<void> {
                     <tr>
                         <td><a href="node-legacy/">node-legacy/</a></td>
                         <td>JavaScript</td>
-                        <td>${runtimeInfo.find(r => r.runtime === 'node-legacy')?.fileCount || 0}</td>
+                        <td>${runtimeInfo.find((r) => r.runtime === "node-legacy")?.fileCount || 0}</td>
                         <td>Legacy Node.js runtime, pre-installed libraries only</td>
                     </tr>
                     <tr>
-                        <td><a href="deno-2025-08-01/">deno-2025-08-01/</a></td>
+                        <td><a href="deno-rt2025/">deno-rt2025/</a></td>
                         <td>TypeScript</td>
-                        <td>${runtimeInfo.find(r => r.runtime === 'deno-2025-08-01')?.fileCount || 0}</td>
+                        <td>${runtimeInfo.find((r) => r.runtime === "deno-rt2025")?.fileCount || 0}</td>
                         <td>Modern Deno runtime, automatic dependency installation</td>
                     </tr>
                     <tr>
                         <td><a href="python-legacy/">python-legacy/</a></td>
                         <td>Python</td>
-                        <td>${runtimeInfo.find(r => r.runtime === 'python-legacy')?.fileCount || 0}</td>
+                        <td>${runtimeInfo.find((r) => r.runtime === "python-legacy")?.fileCount || 0}</td>
                         <td>Legacy Python runtime, pre-installed libraries only</td>
                     </tr>
                     <tr>
-                        <td><a href="python-2025-08-01/">python-2025-08-01/</a></td>
+                        <td><a href="python-rt2025/">python-rt2025/</a></td>
                         <td>Python</td>
-                        <td>${runtimeInfo.find(r => r.runtime === 'python-2025-08-01')?.fileCount || 0}</td>
+                        <td>${runtimeInfo.find((r) => r.runtime === "python-rt2025")?.fileCount || 0}</td>
                         <td>Modern Python runtime, UV package manager support</td>
                     </tr>
                 </tbody>

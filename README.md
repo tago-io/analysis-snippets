@@ -4,15 +4,15 @@ This repository hosts code snippets for the TagoIO Analysis system. The frontend
 
 **JSON Metadata Files:**
 - https://snippets.tago.io/node-legacy.json
-- https://snippets.tago.io/deno-2025-08-01.json
+- https://snippets.tago.io/deno-rt2025.json
 - https://snippets.tago.io/python-legacy.json
-- https://snippets.tago.io/python-2025-08-01.json
+- https://snippets.tago.io/python-rt2025.json
 
 **Individual Code Files:**
 - https://snippets.tago.io/node-legacy/{filename}
-- https://snippets.tago.io/deno-2025-08-01/{filename}
+- https://snippets.tago.io/deno-rt2025/{filename}
 - https://snippets.tago.io/python-legacy/{filename}
-- https://snippets.tago.io/python-2025-08-01/{filename}
+- https://snippets.tago.io/python-rt2025/{filename}
 
 The JSON files contain metadata only. The actual code is served as individual files from the `{runtime}/` directories.
 
@@ -20,9 +20,9 @@ The JSON files contain metadata only. The actual code is served as individual fi
 
 - snippets/
   - node-legacy/
-  - deno-2025-08-01/
+  - deno-rt2025/
   - python-legacy/
-  - python-2025-08-01/
+  - python-rt2025/
 - tools/
   - generate.ts (Deno-based generator)
   - generate.py (legacy Python generator)
