@@ -18,8 +18,8 @@
  ** Save and use the form.
  */
 
-import { Analysis, Services } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data } from "jsr:@tago-io/sdk";
+import type { Data, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Services } from "npm:@tago-io/sdk";
 
 interface TemperatureData {
   variable: string;

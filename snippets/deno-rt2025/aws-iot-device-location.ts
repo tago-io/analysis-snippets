@@ -22,8 +22,8 @@
  */
 
 import { GetPositionEstimateCommand, IoTWirelessClient } from "npm:@aws-sdk/client-iot-wireless";
-import { Analysis, Resources } from "jsr:@tago-io/sdk";
-import type { Data, TagoContext } from "jsr:@tago-io/sdk";
+import type { Data, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Resources } from "npm:@tago-io/sdk";
 
 interface EstimatedConfiguration {
   awsAccessKeyId: string;
@@ -63,9 +63,13 @@ interface AWSPayload {
  */
 function _getConfiguration(context: TagoContext): EstimatedConfiguration {
   const awsAccessKeyId = context.environment.find((x) => x.key === "AWS_ACCESSKEYID")?.value;
-  const awsSecretAccessKey = context.environment.find((x) => x.key === "AWS_SECRETACCESSKEY")?.value;
+  const awsSecretAccessKey = context.environment.find(
+    (x) => x.key === "AWS_SECRETACCESSKEY"
+  )?.value;
   const awsRegion = context.environment.find((x) => x.key === "AWS_REGION")?.value;
-  const desireableAccuracyPercent = context.environment.find((x) => x.key === "DESIREABLE_ACCURACY_PERCENT")?.value;
+  const desireableAccuracyPercent = context.environment.find(
+    (x) => x.key === "DESIREABLE_ACCURACY_PERCENT"
+  )?.value;
 
   if (!awsAccessKeyId) {
     throw new Error("Missing AWS_ACCESSKEYID in environment variables");
@@ -91,7 +95,11 @@ function _getConfiguration(context: TagoContext): EstimatedConfiguration {
 /**
  * Create AWS payload for position estimate command
  */
-function _createAWSPayload(gnssValue?: string, ipAddress?: string, wifiAddresses?: Record<string, number>): AWSPayload {
+function _createAWSPayload(
+  gnssValue?: string,
+  ipAddress?: string,
+  wifiAddresses?: Record<string, number>
+): AWSPayload {
   if (!gnssValue && !ipAddress && !wifiAddresses) {
     throw new Error("No data to create the payload");
   }
@@ -135,14 +143,14 @@ function _createAWSPayload(gnssValue?: string, ipAddress?: string, wifiAddresses
 /**
  * Extract estimated location from AWS response
  */
-function _getEstimatedLocation(response: { GeoJsonPayload?: { transformToString?: () => string } }): EstimatedLocationResponse {
+function _getEstimatedLocation(response: {
+  GeoJsonPayload?: { transformToString?: () => string };
+}): EstimatedLocationResponse {
   if (!response) {
     throw new Error("No response from AWS");
   }
 
-  const estimatedLocation = JSON.parse(
-    response.GeoJsonPayload?.transformToString?.() ?? ""
-  );
+  const estimatedLocation = JSON.parse(response.GeoJsonPayload?.transformToString?.() ?? "");
 
   if (!estimatedLocation) {
     throw new Error("No estimated location found");
@@ -214,7 +222,10 @@ async function getEstimatedDeviceLocation(context: TagoContext, scope: Data[]): 
   const gnssValue = scope.find((x) => x.variable === gnssSolverVariable)?.value as string;
   const ipAddressValue = scope.find((x) => x.variable === ipAddressVariable)?.value as string;
   const ipAddress = ipAddressValue?.split(";");
-  const wifiAddresses = scope.find((x) => x.variable === wifiAdressesVariable)?.metadata as Record<string, number>;
+  const wifiAddresses = scope.find((x) => x.variable === wifiAdressesVariable)?.metadata as Record<
+    string,
+    number
+  >;
 
   try {
     // Create payload for AWS position estimate

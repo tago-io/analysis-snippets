@@ -16,8 +16,8 @@
  **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
 
-import type { TagoContext, DeviceQuery } from "jsr:@tago-io/sdk";
-import { Analysis, Resources } from "jsr:@tago-io/sdk";
+import type { DeviceQuery, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Resources } from "npm:@tago-io/sdk";
 
 async function startAnalysis(_context: TagoContext): Promise<void> {
   // Example of filtering devices by tag.

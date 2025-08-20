@@ -18,8 +18,8 @@
  * two geofences, one with the event code 'danger' and another named 'safe'.
  */
 
-import { Utils, Account, Analysis, Device, Services } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data, AnalysisEnvironment } from "jsr:@tago-io/sdk";
+import type { AnalysisEnvironment, Data, TagoContext } from "npm:@tago-io/sdk";
+import { Account, Analysis, Device, Services, Utils } from "npm:@tago-io/sdk";
 
 interface Point {
   latitude: number;
@@ -76,7 +76,9 @@ function checkZones(point: number[], geofence_list: Geofence[]): Geofence | unde
   const polygons = geofence_list.filter((x) => x.geolocation.type === "Polygon");
   if (polygons.length) {
     // Here we check if our device is inside any Polygon geofence using our function above.
-    const pass_check = polygons.map((x) => insidePolygon(point, x.geolocation.coordinates as number[][]));
+    const pass_check = polygons.map((x) =>
+      insidePolygon(point, x.geolocation.coordinates as number[][])
+    );
     const index = pass_check.findIndex((x) => x === true);
     if (index !== -1) return polygons[index];
   }
@@ -136,7 +138,10 @@ async function startAnalysis(context: TagoContext, scope: Data[]): Promise<void>
   // Now we check if we have any geofences to go through.
   const geofences = await device.getData({ variables: "geofence", qty: 10 });
   const zones: Geofence[] = geofences.map((geofence) => geofence.metadata as Geofence);
-  const zone = checkZones([location.location.coordinates[1], location.location.coordinates[0]], zones);
+  const zone = checkZones(
+    [location.location.coordinates[1], location.location.coordinates[0]],
+    zones
+  );
 
   // The line below starts our notification service.
   const notification = new Services({ token: context.token }).Notification;

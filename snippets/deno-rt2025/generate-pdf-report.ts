@@ -14,9 +14,9 @@
  * type device_token on key and insert your device token on value
  */
 
-import { Analysis, Device, Services, Utils } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data, AnalysisEnvironment } from "jsr:@tago-io/sdk";
-import dayjs from "npm:dayjs"
+import type { AnalysisEnvironment, Data, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Device, Services, Utils } from "npm:@tago-io/sdk";
+import dayjs from "npm:dayjs";
 
 const your_variable = "your_variable"; //enter the variable from your device you would like in the report
 

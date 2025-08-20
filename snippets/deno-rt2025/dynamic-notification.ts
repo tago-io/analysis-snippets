@@ -20,8 +20,8 @@
  **  6 - To finalize your new Policy, hit the save button located in the bottom right corner of the screen.
  */
 
-import { Analysis, Services, Resources } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data} from "jsr:@tago-io/sdk";
+import type { Data, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Resources, Services } from "npm:@tago-io/sdk";
 
 async function startAnalysis(context: TagoContext, scope: Data[]): Promise<void> {
   if (!scope[0]) {

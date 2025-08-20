@@ -13,8 +13,8 @@
  **.
  */
 
-import { Analysis } from "jsr:@tago-io/sdk";
-import type { TagoContext } from "jsr:@tago-io/sdk";
+import type { TagoContext } from "npm:@tago-io/sdk";
+import { Analysis } from "npm:@tago-io/sdk";
 
 interface ApiResponse {
   result: {

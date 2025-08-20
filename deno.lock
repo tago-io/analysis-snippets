@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@std/path@*": "1.1.0",
-    "jsr:@tago-io/sdk@*": "12.1.4",
+    "npm:@tago-io/sdk@*": "12.1.4",
     "npm:@aws-sdk/client-iot-wireless@*": "3.864.0",
     "npm:@types/node@*": "22.15.15",
     "npm:async@*": "3.2.6",

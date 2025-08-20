@@ -24,8 +24,8 @@
  ** 5 - Press the Copy Button and place at the Environment Variables tab of this analysis.
  */
 
-import { Analysis, Account, Utils, Device } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data, DeviceListItem } from "jsr:@tago-io/sdk";
+import type { Data, DeviceListItem, TagoContext } from "npm:@tago-io/sdk";
+import { Account, Analysis, Device, Utils } from "npm:@tago-io/sdk";
 import _ from "npm:lodash";
 
 async function calculateUserTransactions(
@@ -104,7 +104,10 @@ async function myAnalysis(context: TagoContext): Promise<void> {
   });
 
   const grouped_device_list = _.chain(device_list)
-    .groupBy((collection: DeviceListItem) => collection.tags?.find((x: { key: string; value: string }) => x.key === tag_to_search)?.value)
+    .groupBy(
+      (collection: DeviceListItem) =>
+        collection.tags?.find((x: { key: string; value: string }) => x.key === tag_to_search)?.value
+    )
     .map((value: DeviceListItem[], key: string) => ({ value: key, device_list: value }))
     .value();
 

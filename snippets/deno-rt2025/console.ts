@@ -12,7 +12,8 @@
  * You can use this principle to show any information during and after development.
  */
 
-import { Analysis } from "jsr:@tago-io/sdk";
+import { Analysis } from "npm:@tago-io/sdk";
+
 // The function myAnalysis will run when you execute your analysis
 function myAnalysis() {
   console.log("Hello World");

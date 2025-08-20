@@ -17,8 +17,8 @@
  **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
 
-import { Resources, Analysis } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data, ConfigurationParams } from "jsr:@tago-io/sdk";
+import type { ConfigurationParams, Data, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Resources } from "npm:@tago-io/sdk";
 
 // set the timezone to show up on dashboard. TagoIO may handle ISOString automatically in a future update.
 let timezone = "America/New_York";
@@ -26,7 +26,13 @@ let timezone = "America/New_York";
 const getParam = (params: ConfigurationParams[], key: string): ConfigurationParams =>
   params.find((x) => x.key === key) || { key, value: "-", sent: false };
 
-async function applyDeviceCalculation({ id: deviceID, name }: { id: string, name: string }): Promise<void> {
+async function applyDeviceCalculation({
+  id: deviceID,
+  name,
+}: {
+  id: string;
+  name: string;
+}): Promise<void> {
   const deviceInfoText = `${name}(${deviceID})`;
   console.info(`Processing Device ${deviceInfoText}`);
 
@@ -75,7 +81,7 @@ async function applyDeviceCalculation({ id: deviceID, name }: { id: string, name
 
 // Simple queue implementation to process devices with concurrency control
 async function processDevicesWithQueue(
-  devices: { id: string, name: string }[],
+  devices: { id: string; name: string }[],
   concurrency: number = 5
 ): Promise<void> {
   const results: Promise<void>[] = [];

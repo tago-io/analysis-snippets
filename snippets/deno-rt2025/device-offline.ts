@@ -26,9 +26,9 @@
  **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
 
-import { Analysis, Services, Utils, Resources } from "jsr:@tago-io/sdk";
+import type { DeviceQuery, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Resources, Services, Utils } from "npm:@tago-io/sdk";
 import dayjs from "npm:dayjs";
-import type { TagoContext, DeviceQuery } from "jsr:@tago-io/sdk";
 
 async function startAnalysis(context: TagoContext): Promise<void> {
   // Transform all Environment Variable to JSON.

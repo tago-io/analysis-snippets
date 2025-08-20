@@ -24,7 +24,7 @@ TagoIO provides multiple runtime environments for Analysis scripts, each with di
 - **Environment**: Modern Deno runtime with full TypeScript support
 - **Use Case**: New analyses requiring modern JavaScript/TypeScript features
 - **Dependencies**: Automatic dependency installation via Deno's built-in package manager
-- **Features**: 
+- **Features**:
   - Native TypeScript support
   - Modern JavaScript APIs
   - Better security model
@@ -146,7 +146,7 @@ console.log("Hello World");
 **Python:**
 
 ```python
-# @title: Your Snippet Title  
+# @title: Your Snippet Title
 # @description: Brief description of what this snippet does
 # @tags: tag1, tag2, tag3
 
@@ -171,7 +171,7 @@ deno task generate
 ```
 snippets/
 ├── node-legacy/           # Node.js legacy runtime snippets
-├── deno-rt2025/      # Deno rt2025 runtime snippets  
+├── deno-rt2025/      # Deno rt2025 runtime snippets
 ├── python-legacy/         # Python legacy runtime snippets
 └── python-rt2025/    # Python rt2025 runtime snippets
 
@@ -231,7 +231,7 @@ The deployment includes both JSON metadata files and individual code files in se
 5. **Code Quality**: Follow the runtime's best practices and conventions
 6. **Comments**: Include helpful inline comments in your code
 7. **Dependencies**: Ensure snippets work with the target runtime's standard library
-8. **SDK Types**: For Deno/TypeScript snippets, always import types from the TagoIO SDK rather than defining custom interfaces (e.g., `import type { AnalysisConstructorParams, Data } from "jsr:@tago-io/sdk"`)
+8. **SDK Types**: For Deno/TypeScript snippets, always import types from the TagoIO SDK rather than defining custom interfaces (e.g., `import type { AnalysisConstructorParams, Data } from "npm:@tago-io/sdk"`)
 
 ## Common Tags
 

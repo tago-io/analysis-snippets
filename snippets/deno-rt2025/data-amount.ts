@@ -18,8 +18,8 @@
  *
  */
 
-import { Analysis, Resources } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data, DeviceListItem } from "jsr:@tago-io/sdk";
+import type { Data, DeviceListItem, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Resources } from "npm:@tago-io/sdk";
 import { queue } from "npm:async";
 
 interface DeviceResult {

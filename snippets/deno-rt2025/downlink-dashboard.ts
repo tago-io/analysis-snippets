@@ -27,8 +27,8 @@
  **
  */
 
-import { Analysis, Utils, Resources } from "jsr:@tago-io/sdk";
-import type { TagoContext, Data, DownlinkOptions } from "jsr:@tago-io/sdk";
+import type { Data, DownlinkOptions, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Resources, Utils } from "npm:@tago-io/sdk";
 
 async function startAnalysis(context: TagoContext, scope: Data[]): Promise<void> {
   // Remove code below if you want to trigger by schedule action and using environment variables.

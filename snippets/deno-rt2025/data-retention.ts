@@ -16,7 +16,7 @@
  **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
 
-import { Analysis, DeviceQuery, Resources, TagoContext } from "jsr:@tago-io/sdk";
+import { Analysis, type DeviceQuery, Resources, type TagoContext } from "npm:@tago-io/sdk";
 import dayjs from "npm:dayjs";
 
 // The function startAnalysis will run when you execute your analysis

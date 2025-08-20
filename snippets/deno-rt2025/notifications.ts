@@ -2,8 +2,8 @@
 // @description: Send notification to account and dashboard with optional dashboard linking
 // @tags: notification, alert, dashboard, email
 
-import { Analysis, Services, Utils } from "jsr:@tago-io/sdk";
-import type { TagoContext } from "jsr:@tago-io/sdk";
+import type { TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Services, Utils } from "npm:@tago-io/sdk";
 
 /**
  * The main function used by Tago to run the script.

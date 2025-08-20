@@ -20,8 +20,8 @@
  * on key, type email and on value, type the e-mail address
  */
 
-import { Analysis, Device, Services, Utils } from "jsr:@tago-io/sdk";
-import type { TagoContext, DataQuery } from "jsr:@tago-io/sdk";
+import type { DataQuery, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Device, Services, Utils } from "npm:@tago-io/sdk";
 
 // The function myAnalysis will run when you execute your analysis
 async function startAnalysis(context: TagoContext): Promise<void> {

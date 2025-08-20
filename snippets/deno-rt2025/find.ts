@@ -16,8 +16,8 @@
  * type device_token on key, and paste your token on value
  */
 
-import { Analysis, Device, Utils } from "jsr:@tago-io/sdk";
-import type { TagoContext, DataQuery } from "jsr:@tago-io/sdk";
+import type { DataQuery, TagoContext } from "npm:@tago-io/sdk";
+import { Analysis, Device, Utils } from "npm:@tago-io/sdk";
 
 // The function startAnalysis will run when you execute your analysis
 async function startAnalysis(context: TagoContext): Promise<void> {
