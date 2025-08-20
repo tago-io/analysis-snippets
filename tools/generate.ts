@@ -4,10 +4,17 @@ const ROOT = resolve(new URL("../", import.meta.url).pathname);
 const SNIPPETS_DIR = join(ROOT, "snippets");
 const DIST_DIR = join(ROOT, "dist");
 
-const RUNTIME_DIRS = ["node-legacy", "deno-rt2025", "python-legacy", "python-rt2025"];
+const RUNTIME_DIRS = [
+  "node-legacy",
+  "node-rt2025",
+  "deno-rt2025",
+  "python-legacy",
+  "python-rt2025",
+];
 
 const LANGUAGE_MAP: Record<string, string> = {
   "node-legacy": "javascript",
+  "node-rt2025": "javascript",
   "deno-rt2025": "typescript",
   "python-legacy": "python",
   "python-rt2025": "python",
@@ -181,6 +188,185 @@ function buildRuntimeJson(runtime: string): Omit<RuntimeJson, "snippets"> {
     schema_version: SCHEMA_VERSION,
     generated_at: new Date().toISOString(),
   };
+}
+
+async function generateRuntimeIndexHtml(
+  runtime: string,
+  files: Array<{ name: string; size: number; modified: Date }>
+): Promise<void> {
+  const runtimeIndexPath = join(DIST_DIR, runtime, "index.html");
+  const language = LANGUAGE_MAP[runtime];
+
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return "0 B";
+    const k = 1024;
+    const sizes = ["B", "KB", "MB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+  };
+
+  const formatDate = (date: Date): string => {
+    return date.toISOString().replace("T", " ").substring(0, 19) + " UTC";
+  };
+
+  const currentTime = new Date().toISOString().replace("T", " ").substring(0, 19) + " UTC";
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Index of /${runtime}/ - TagoIO Analysis Snippets</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .info {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .icon {
+            width: 20px;
+            text-align: center;
+        }
+        .name {
+            min-width: 300px;
+        }
+        .size {
+            text-align: right;
+            width: 80px;
+        }
+        .date {
+            width: 200px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .runtime-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        .curl-info {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-left: 4px solid #666;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📁 Index of /${runtime}/</h1>
+        
+        <div class="info">
+            Generated on: ${currentTime}<br>
+            Runtime: ${runtime} (${language})<br>
+            Repository: <a href="https://github.com/tago-io/analysis-snippets">https://github.com/tago-io/analysis-snippets</a>
+        </div>
+
+        <div class="runtime-info">
+            <strong>${runtime} Runtime:</strong><br>
+            • Language: ${language}<br>
+            • Files: ${files.length} snippets<br>
+            • API Metadata: <a href="../${runtime}.json">${runtime}.json</a>
+        </div>
+
+        <div class="curl-info">
+            <strong>💡 Usage Examples:</strong><br>
+            <code>curl -s https://snippets.tago.io/${runtime}.json | jq .</code> - Get metadata<br>
+            <code>curl -s https://snippets.tago.io/${runtime}/console.js</code> - Get code file
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="icon"></th>
+                    <th class="name">Name</th>
+                    <th class="size">Size</th>
+                    <th class="date">Last Modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="icon">📁</td>
+                    <td class="name"><a href="../">..</a></td>
+                    <td class="size">-</td>
+                    <td class="date">-</td>
+                </tr>`;
+
+  let tableRows = "";
+  files.sort((a, b) => a.name.localeCompare(b.name));
+
+  for (const file of files) {
+    const ext = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+    const icon = [".js", ".ts", ".tsx", ".py"].includes(ext) ? "📄" : "📄";
+
+    tableRows += `
+                <tr>
+                    <td class="icon">${icon}</td>
+                    <td class="name"><a href="${file.name}">${file.name}</a></td>
+                    <td class="size">${formatFileSize(file.size)}</td>
+                    <td class="date">${formatDate(file.modified)}</td>
+                </tr>`;
+  }
+
+  const footerHtml = `
+            </tbody>
+        </table>
+
+        <div class="info" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <small>
+                📡 Auto-generated index • 
+                <a href="../">Back to main index</a> • 
+                <a href="https://github.com/tago-io/analysis-snippets">Source Code</a> • 
+                <a href="https://tago.io">TagoIO Platform</a>
+            </small>
+        </div>
+    </div>
+</body>
+</html>`;
+
+  await Deno.writeTextFile(runtimeIndexPath, html + tableRows + footerHtml);
+  console.log(`wrote dist/${runtime}/index.html`);
 }
 
 async function generateIndexHtml(): Promise<void> {
@@ -456,6 +642,12 @@ async function generateIndexHtml(): Promise<void> {
                         <td>Legacy Node.js runtime, pre-installed libraries only</td>
                     </tr>
                     <tr>
+                        <td><a href="node-rt2025/">node-rt2025/</a></td>
+                        <td>JavaScript</td>
+                        <td>${runtimeInfo.find((r) => r.runtime === "node-rt2025")?.fileCount || 0}</td>
+                        <td>Modern Node.js runtime, fetch API support</td>
+                    </tr>
+                    <tr>
                         <td><a href="deno-rt2025/">deno-rt2025/</a></td>
                         <td>TypeScript</td>
                         <td>${runtimeInfo.find((r) => r.runtime === "deno-rt2025")?.fileCount || 0}</td>
@@ -508,6 +700,14 @@ async function generateCNAME(): Promise<void> {
 async function main(): Promise<void> {
   await Deno.mkdir(DIST_DIR, { recursive: true });
 
+  // Collect all runtime info for main index
+  const allRuntimeInfo: Array<{
+    runtime: string;
+    language: string;
+    fileCount: number;
+    files: Array<{ name: string; size: number; modified: Date }>;
+  }> = [];
+
   for (const runtime of RUNTIME_DIRS) {
     const payload: RuntimeJson = {
       ...buildRuntimeJson(runtime),
@@ -522,12 +722,45 @@ async function main(): Promise<void> {
     const relativePath = outFile.replace(`${ROOT}/`, "");
     console.log(`wrote ${relativePath} with ${payload.snippets.length} snippets`);
     console.log(`wrote dist/${runtime}/ with ${payload.snippets.length} clean files`);
+
+    // Collect file info for runtime directory index
+    const runtimeDir = join(DIST_DIR, runtime);
+    const files: Array<{ name: string; size: number; modified: Date }> = [];
+
+    try {
+      for await (const entry of Deno.readDir(runtimeDir)) {
+        if (entry.isFile && entry.name !== "index.html") {
+          const filePath = join(runtimeDir, entry.name);
+          const stat = await Deno.stat(filePath);
+          files.push({
+            name: entry.name,
+            size: stat.size,
+            modified: stat.mtime || new Date(),
+          });
+        }
+      }
+    } catch {
+      // Directory doesn't exist or error reading, skip
+    }
+
+    // Generate individual runtime index.html
+    if (files.length > 0) {
+      await generateRuntimeIndexHtml(runtime, files);
+    }
+
+    // Store info for main index
+    allRuntimeInfo.push({
+      runtime,
+      language: LANGUAGE_MAP[runtime],
+      fileCount: files.length,
+      files,
+    });
   }
 
   // Generate the CNAME file for GitHub Pages custom domain
   await generateCNAME();
 
-  // Generate the index.html file
+  // Generate the main index.html file
   await generateIndexHtml();
 }
 
