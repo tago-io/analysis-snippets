@@ -15,16 +15,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          deno-version: v2.x
+          node-version: '22.x'
+          cache: 'npm'
 
-      - name: Install npm deps with Deno
-        run: deno install --allow-scripts
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Build site with Deno
-        run: deno task build
+      - name: Build site
+        run: npm run build
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
