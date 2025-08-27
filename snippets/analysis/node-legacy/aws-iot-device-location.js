@@ -30,7 +30,7 @@ var __export = (target, all) => {
 };
 var __copyProps = (to, from, except, desc) => {
   if ((from && typeof from === "object") || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
+    for (const key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
         __defProp(to, key, {
           get: () => from[key],
@@ -63,7 +63,7 @@ var require_dist_cjs = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -185,7 +185,7 @@ var require_dist_cjs2 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -350,7 +350,7 @@ var require_dist_cjs2 = __commonJS({
     __name(_HttpResponse, "HttpResponse");
     var HttpResponse = _HttpResponse;
     function isValidHostname(hostname) {
-      const hostPattern = /^[a-z0-9][a-z0-9\.\-]*[a-z0-9]$/;
+      const hostPattern = /^[a-z0-9][a-z0-9.-]*[a-z0-9]$/;
       return hostPattern.test(hostname);
     }
     __name(isValidHostname, "isValidHostname");
@@ -360,7 +360,6 @@ var require_dist_cjs2 = __commonJS({
 // node_modules/@aws-sdk/middleware-host-header/dist-cjs/index.js
 var require_dist_cjs3 = __commonJS({
   "node_modules/@aws-sdk/middleware-host-header/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -371,7 +370,7 @@ var require_dist_cjs3 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -433,7 +432,6 @@ var require_dist_cjs3 = __commonJS({
 // node_modules/@aws-sdk/middleware-logger/dist-cjs/index.js
 var require_dist_cjs4 = __commonJS({
   "node_modules/@aws-sdk/middleware-logger/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -444,7 +442,7 @@ var require_dist_cjs4 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -523,7 +521,6 @@ var require_dist_cjs4 = __commonJS({
 // node_modules/@aws-sdk/middleware-recursion-detection/dist-cjs/index.js
 var require_dist_cjs5 = __commonJS({
   "node_modules/@aws-sdk/middleware-recursion-detection/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -534,7 +531,7 @@ var require_dist_cjs5 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -561,7 +558,7 @@ var require_dist_cjs5 = __commonJS({
         if (
           !import_protocol_http.HttpRequest.isInstance(request) ||
           options.runtime !== "node" ||
-          request.headers.hasOwnProperty(TRACE_ID_HEADER_NAME)
+          Object.hasOwn(request.headers, TRACE_ID_HEADER_NAME)
         ) {
           return next(args);
         }
@@ -615,7 +612,7 @@ var require_dist_cjs6 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -634,14 +631,12 @@ var require_dist_cjs6 = __commonJS({
       resolveEndpoint: () => resolveEndpoint2,
     });
     module2.exports = __toCommonJS2(src_exports);
-    var IP_V4_REGEX = new RegExp(
-      `^(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}$`
-    );
+    var IP_V4_REGEX = /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/;
     var isIpAddress2 = /* @__PURE__ */ __name(
       (value) => IP_V4_REGEX.test(value) || (value.startsWith("[") && value.endsWith("]")),
       "isIpAddress"
     );
-    var VALID_HOST_LABEL_REGEX = new RegExp(`^(?!.*-$)(?!-)[a-zA-Z0-9-]{1,63}$`);
+    var VALID_HOST_LABEL_REGEX = /^(?!.*-$)(?!-)[a-zA-Z0-9-]{1,63}$/;
     var isValidHostLabel = /* @__PURE__ */ __name((value, allowSubDomains = false) => {
       if (!allowSubDomains) {
         return VALID_HOST_LABEL_REGEX.test(value);
@@ -1090,7 +1085,6 @@ var require_dist_cjs6 = __commonJS({
 // node_modules/@aws-sdk/util-endpoints/dist-cjs/index.js
 var require_dist_cjs7 = __commonJS({
   "node_modules/@aws-sdk/util-endpoints/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -1101,7 +1095,7 @@ var require_dist_cjs7 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -1464,7 +1458,6 @@ var require_dist_cjs7 = __commonJS({
 // node_modules/@aws-sdk/middleware-user-agent/dist-cjs/index.js
 var require_dist_cjs8 = __commonJS({
   "node_modules/@aws-sdk/middleware-user-agent/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -1475,7 +1468,7 @@ var require_dist_cjs8 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -1509,8 +1502,8 @@ var require_dist_cjs8 = __commonJS({
     var X_AMZ_USER_AGENT = "x-amz-user-agent";
     var SPACE = " ";
     var UA_NAME_SEPARATOR = "/";
-    var UA_NAME_ESCAPE_REGEX = /[^\!\$\%\&\'\*\+\-\.\^\_\`\|\~\d\w]/g;
-    var UA_VALUE_ESCAPE_REGEX = /[^\!\$\%\&\'\*\+\-\.\^\_\`\|\~\d\w\#]/g;
+    var UA_NAME_ESCAPE_REGEX = /[^!$%&'*+\-.^_`|~\d\w]/g;
+    var UA_VALUE_ESCAPE_REGEX = /[^!$%&'*+\-.^_`|~\d\w#]/g;
     var UA_ESCAPE_CHAR = "-";
     var userAgentMiddleware = /* @__PURE__ */ __name(
       (options) => (next, context) => async (args) => {
@@ -1612,7 +1605,7 @@ var require_dist_cjs9 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -1664,7 +1657,7 @@ var require_dist_cjs10 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -1707,7 +1700,7 @@ var require_dist_cjs11 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -1984,7 +1977,7 @@ var require_dist_cjs12 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -2025,7 +2018,7 @@ var require_dist_cjs12 = __commonJS({
           : _a.call(logger, `@smithy/property-provider ${tryNextLink ? "->" : "(!)"} ${message}`);
       }
       static from(error, options = true) {
-        return Object.assign(new this(error.message, options), error);
+        return Object.assign(new _ProviderError2(error.message, options), error);
       }
     };
     __name(_ProviderError, "ProviderError");
@@ -2125,7 +2118,6 @@ var require_dist_cjs12 = __commonJS({
 // node_modules/@smithy/shared-ini-file-loader/dist-cjs/getHomeDir.js
 var require_getHomeDir = __commonJS({
   "node_modules/@smithy/shared-ini-file-loader/dist-cjs/getHomeDir.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getHomeDir = void 0;
     var os_1 = require("os");
@@ -2153,7 +2145,6 @@ var require_getHomeDir = __commonJS({
 // node_modules/@smithy/shared-ini-file-loader/dist-cjs/getSSOTokenFilepath.js
 var require_getSSOTokenFilepath = __commonJS({
   "node_modules/@smithy/shared-ini-file-loader/dist-cjs/getSSOTokenFilepath.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getSSOTokenFilepath = void 0;
     var crypto_1 = require("crypto");
@@ -2177,7 +2168,6 @@ var require_getSSOTokenFilepath = __commonJS({
 // node_modules/@smithy/shared-ini-file-loader/dist-cjs/getSSOTokenFromFile.js
 var require_getSSOTokenFromFile = __commonJS({
   "node_modules/@smithy/shared-ini-file-loader/dist-cjs/getSSOTokenFromFile.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getSSOTokenFromFile = void 0;
     var fs_1 = require("fs");
@@ -2195,7 +2185,6 @@ var require_getSSOTokenFromFile = __commonJS({
 // node_modules/@smithy/shared-ini-file-loader/dist-cjs/slurpFile.js
 var require_slurpFile = __commonJS({
   "node_modules/@smithy/shared-ini-file-loader/dist-cjs/slurpFile.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.slurpFile = void 0;
     var fs_1 = require("fs");
@@ -2227,7 +2216,7 @@ var require_dist_cjs13 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -2307,7 +2296,7 @@ var require_dist_cjs13 = __commonJS({
         (0, import_path.join)((0, import_getHomeDir2.getHomeDir)(), ".aws", "credentials"),
       "getCredentialsFilepath"
     );
-    var prefixKeyRegex = /^([\w-]+)\s(["'])?([\w-@\+\.%:/]+)\2$/;
+    var prefixKeyRegex = /^([\w-]+)\s(["'])?([\w-@+.%:/]+)\2$/;
     var profileNameBlockList = ["__proto__", "profile __proto__"];
     var parseIni = /* @__PURE__ */ __name((iniData) => {
       const map = {};
@@ -2437,7 +2426,7 @@ var require_dist_cjs14 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -2540,7 +2529,6 @@ var require_dist_cjs14 = __commonJS({
 // node_modules/@smithy/middleware-endpoint/dist-cjs/adaptors/getEndpointUrlConfig.js
 var require_getEndpointUrlConfig = __commonJS({
   "node_modules/@smithy/middleware-endpoint/dist-cjs/adaptors/getEndpointUrlConfig.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getEndpointUrlConfig = void 0;
     var shared_ini_file_loader_1 = require_dist_cjs13();
@@ -2585,7 +2573,6 @@ var require_getEndpointUrlConfig = __commonJS({
 // node_modules/@smithy/middleware-endpoint/dist-cjs/adaptors/getEndpointFromConfig.js
 var require_getEndpointFromConfig = __commonJS({
   "node_modules/@smithy/middleware-endpoint/dist-cjs/adaptors/getEndpointFromConfig.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getEndpointFromConfig = void 0;
     var node_config_provider_1 = require_dist_cjs14();
@@ -2611,7 +2598,7 @@ var require_dist_cjs15 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -2664,7 +2651,7 @@ var require_dist_cjs16 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -2713,7 +2700,7 @@ var require_dist_cjs17 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -2817,7 +2804,7 @@ var require_dist_cjs18 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -2863,7 +2850,7 @@ var require_dist_cjs18 = __commonJS({
       }
       return endpointParams;
     }, "resolveParamsForS3");
-    var DOMAIN_PATTERN = /^[a-z0-9][a-z0-9\.\-]{1,61}[a-z0-9]$/;
+    var DOMAIN_PATTERN = /^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/;
     var IP_ADDRESS_PATTERN = /(\d+\.){3}\d+/;
     var DOTS_PATTERN = /\.\./;
     var isDnsCompatibleBucketName = /* @__PURE__ */ __name(
@@ -3094,7 +3081,6 @@ var require_dist_cjs18 = __commonJS({
 // node_modules/uuid/dist/rng.js
 var require_rng = __commonJS({
   "node_modules/uuid/dist/rng.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3118,7 +3104,6 @@ var require_rng = __commonJS({
 // node_modules/uuid/dist/regex.js
 var require_regex = __commonJS({
   "node_modules/uuid/dist/regex.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3132,7 +3117,6 @@ var require_regex = __commonJS({
 // node_modules/uuid/dist/validate.js
 var require_validate = __commonJS({
   "node_modules/uuid/dist/validate.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3152,7 +3136,6 @@ var require_validate = __commonJS({
 // node_modules/uuid/dist/stringify.js
 var require_stringify = __commonJS({
   "node_modules/uuid/dist/stringify.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3205,7 +3188,6 @@ var require_stringify = __commonJS({
 // node_modules/uuid/dist/v1.js
 var require_v1 = __commonJS({
   "node_modules/uuid/dist/v1.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3282,7 +3264,6 @@ var require_v1 = __commonJS({
 // node_modules/uuid/dist/parse.js
 var require_parse = __commonJS({
   "node_modules/uuid/dist/parse.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3323,7 +3304,6 @@ var require_parse = __commonJS({
 // node_modules/uuid/dist/v35.js
 var require_v35 = __commonJS({
   "node_modules/uuid/dist/v35.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3390,7 +3370,6 @@ var require_v35 = __commonJS({
 // node_modules/uuid/dist/md5.js
 var require_md5 = __commonJS({
   "node_modules/uuid/dist/md5.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3415,7 +3394,6 @@ var require_md5 = __commonJS({
 // node_modules/uuid/dist/v3.js
 var require_v3 = __commonJS({
   "node_modules/uuid/dist/v3.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3434,7 +3412,6 @@ var require_v3 = __commonJS({
 // node_modules/uuid/dist/native.js
 var require_native = __commonJS({
   "node_modules/uuid/dist/native.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3453,7 +3430,6 @@ var require_native = __commonJS({
 // node_modules/uuid/dist/v4.js
 var require_v4 = __commonJS({
   "node_modules/uuid/dist/v4.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3489,7 +3465,6 @@ var require_v4 = __commonJS({
 // node_modules/uuid/dist/sha1.js
 var require_sha1 = __commonJS({
   "node_modules/uuid/dist/sha1.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3514,7 +3489,6 @@ var require_sha1 = __commonJS({
 // node_modules/uuid/dist/v5.js
 var require_v5 = __commonJS({
   "node_modules/uuid/dist/v5.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3533,7 +3507,6 @@ var require_v5 = __commonJS({
 // node_modules/uuid/dist/nil.js
 var require_nil = __commonJS({
   "node_modules/uuid/dist/nil.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3546,7 +3519,6 @@ var require_nil = __commonJS({
 // node_modules/uuid/dist/version.js
 var require_version = __commonJS({
   "node_modules/uuid/dist/version.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
@@ -3569,63 +3541,44 @@ var require_version = __commonJS({
 // node_modules/uuid/dist/index.js
 var require_dist = __commonJS({
   "node_modules/uuid/dist/index.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true,
     });
     Object.defineProperty(exports, "NIL", {
       enumerable: true,
-      get: function () {
-        return _nil.default;
-      },
+      get: () => _nil.default,
     });
     Object.defineProperty(exports, "parse", {
       enumerable: true,
-      get: function () {
-        return _parse.default;
-      },
+      get: () => _parse.default,
     });
     Object.defineProperty(exports, "stringify", {
       enumerable: true,
-      get: function () {
-        return _stringify.default;
-      },
+      get: () => _stringify.default,
     });
     Object.defineProperty(exports, "v1", {
       enumerable: true,
-      get: function () {
-        return _v.default;
-      },
+      get: () => _v.default,
     });
     Object.defineProperty(exports, "v3", {
       enumerable: true,
-      get: function () {
-        return _v2.default;
-      },
+      get: () => _v2.default,
     });
     Object.defineProperty(exports, "v4", {
       enumerable: true,
-      get: function () {
-        return _v3.default;
-      },
+      get: () => _v3.default,
     });
     Object.defineProperty(exports, "v5", {
       enumerable: true,
-      get: function () {
-        return _v4.default;
-      },
+      get: () => _v4.default,
     });
     Object.defineProperty(exports, "validate", {
       enumerable: true,
-      get: function () {
-        return _validate.default;
-      },
+      get: () => _validate.default,
     });
     Object.defineProperty(exports, "version", {
       enumerable: true,
-      get: function () {
-        return _version.default;
-      },
+      get: () => _version.default,
     });
     var _v = _interopRequireDefault(require_v1());
     var _v2 = _interopRequireDefault(require_v3());
@@ -3655,7 +3608,7 @@ var require_dist_cjs19 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -3760,7 +3713,7 @@ var require_dist_cjs20 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -3866,7 +3819,7 @@ var require_dist_cjs20 = __commonJS({
       }
       calculateTimeWindow() {
         this.timeWindow = this.getPrecise(
-          Math.pow((this.lastMaxRate * (1 - this.beta)) / this.scaleConstant, 1 / 3)
+          ((this.lastMaxRate * (1 - this.beta)) / this.scaleConstant) ** (1 / 3)
         );
       }
       cubicThrottle(rateToUse) {
@@ -3874,7 +3827,7 @@ var require_dist_cjs20 = __commonJS({
       }
       cubicSuccess(timestamp) {
         return this.getPrecise(
-          this.scaleConstant * Math.pow(timestamp - this.lastThrottleTime - this.timeWindow, 3) +
+          this.scaleConstant * (timestamp - this.lastThrottleTime - this.timeWindow) ** 3 +
             this.lastMaxRate
         );
       }
@@ -4074,7 +4027,7 @@ var require_dist_cjs21 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -4410,7 +4363,7 @@ var require_dist_cjs22 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -4447,7 +4400,7 @@ var require_dist_cjs23 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -4492,7 +4445,6 @@ var require_dist_cjs23 = __commonJS({
 // node_modules/@smithy/util-base64/dist-cjs/fromBase64.js
 var require_fromBase64 = __commonJS({
   "node_modules/@smithy/util-base64/dist-cjs/fromBase64.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fromBase64 = void 0;
     var util_buffer_from_1 = require_dist_cjs23();
@@ -4524,7 +4476,7 @@ var require_dist_cjs24 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -4588,7 +4540,6 @@ var require_dist_cjs24 = __commonJS({
 // node_modules/@smithy/util-base64/dist-cjs/toBase64.js
 var require_toBase64 = __commonJS({
   "node_modules/@smithy/util-base64/dist-cjs/toBase64.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.toBase64 = void 0;
     var util_buffer_from_1 = require_dist_cjs23();
@@ -4628,7 +4579,7 @@ var require_dist_cjs25 = __commonJS({
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -4652,7 +4603,6 @@ var require_dist_cjs25 = __commonJS({
 // node_modules/@smithy/util-stream/dist-cjs/getAwsChunkedEncodingStream.js
 var require_getAwsChunkedEncodingStream = __commonJS({
   "node_modules/@smithy/util-stream/dist-cjs/getAwsChunkedEncodingStream.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getAwsChunkedEncodingStream = void 0;
     var stream_1 = require("stream");
@@ -4709,7 +4659,7 @@ var require_dist_cjs26 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -4753,7 +4703,7 @@ var require_dist_cjs27 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -4807,7 +4757,7 @@ var require_dist_cjs28 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -5531,7 +5481,7 @@ var require_dist_cjs29 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -5758,7 +5708,7 @@ var require_dist_cjs30 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -5814,7 +5764,6 @@ var require_dist_cjs30 = __commonJS({
 // node_modules/@smithy/util-stream/dist-cjs/sdk-stream-mixin.browser.js
 var require_sdk_stream_mixin_browser = __commonJS({
   "node_modules/@smithy/util-stream/dist-cjs/sdk-stream-mixin.browser.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.sdkStreamMixin = void 0;
     var fetch_http_handler_1 = require_dist_cjs29();
@@ -5894,7 +5843,6 @@ var require_sdk_stream_mixin_browser = __commonJS({
 // node_modules/@smithy/util-stream/dist-cjs/sdk-stream-mixin.js
 var require_sdk_stream_mixin = __commonJS({
   "node_modules/@smithy/util-stream/dist-cjs/sdk-stream-mixin.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.sdkStreamMixin = void 0;
     var node_http_handler_1 = require_dist_cjs28();
@@ -5979,7 +5927,7 @@ var require_dist_cjs31 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -6053,7 +6001,7 @@ var require_dist_cjs32 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -6624,7 +6572,7 @@ var require_dist_cjs32 = __commonJS({
       return buildDate(year, month, day, { hours, minutes, seconds, fractionalMilliseconds });
     }, "parseRfc3339DateTime");
     var RFC3339_WITH_OFFSET = new RegExp(
-      /^(\d{4})-(\d{2})-(\d{2})[tT](\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(([-+]\d{2}\:\d{2})|[zZ])$/
+      /^(\d{4})-(\d{2})-(\d{2})[tT](\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(([-+]\d{2}:\d{2})|[zZ])$/
     );
     var parseRfc3339DateTimeWithOffset = /* @__PURE__ */ __name((value) => {
       if (value === null || value === void 0) {
@@ -6986,9 +6934,7 @@ var require_dist_cjs32 = __commonJS({
       };
     }, "resolveDefaultRuntimeConfig");
     function extendedEncodeURIComponent(str) {
-      return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
-        return "%" + c.charCodeAt(0).toString(16).toUpperCase();
-      });
+      return encodeURIComponent(str).replace(/[!'()*]/g, (c) => "%" + c.charCodeAt(0).toString(16).toUpperCase());
     }
     __name(extendedEncodeURIComponent, "extendedEncodeURIComponent");
     var getArrayIfSingleItem = /* @__PURE__ */ __name(
@@ -6998,7 +6944,7 @@ var require_dist_cjs32 = __commonJS({
     var getValueFromTextNode = /* @__PURE__ */ __name((obj) => {
       const textNodeName = "#text";
       for (const key in obj) {
-        if (obj.hasOwnProperty(key) && obj[key][textNodeName] !== void 0) {
+        if (Object.hasOwn(obj, key) && obj[key][textNodeName] !== void 0) {
           obj[key] = obj[key][textNodeName];
         } else if (typeof obj[key] === "object" && obj[key] !== null) {
           obj[key] = getValueFromTextNode(obj[key]);
@@ -7113,7 +7059,7 @@ var require_dist_cjs32 = __commonJS({
         }
         return;
       }
-      let [filter, value] = instructions[targetKey];
+      const [filter, value] = instructions[targetKey];
       if (typeof value === "function") {
         let _value;
         const defaultFilterPassed = filter === void 0 && (_value = value()) != null;
@@ -7231,7 +7177,6 @@ var require_isStreamingPayload = __commonJS({
   "node_modules/@smithy/middleware-retry/dist-cjs/isStreamingPayload/isStreamingPayload.js"(
     exports
   ) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.isStreamingPayload = void 0;
     var stream_1 = require("stream");
@@ -7257,7 +7202,7 @@ var require_dist_cjs33 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -7692,7 +7637,7 @@ var require_dist_cjs34 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -8193,7 +8138,7 @@ var require_dist_cjs35 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -8303,7 +8248,7 @@ var require_tslib = __commonJS({
               ? this
               : {};
       if (typeof define === "function" && define.amd) {
-        define("tslib", ["exports"], function (exports2) {
+        define("tslib", ["exports"], (exports2) => {
           factory(createExporter(root, createExporter(exports2)));
         });
       } else if (typeof module2 === "object" && typeof module2.exports === "object") {
@@ -8319,21 +8264,19 @@ var require_tslib = __commonJS({
             exports2.__esModule = true;
           }
         }
-        return function (id, v) {
-          return (exports2[id] = previous ? previous(id, v) : v);
-        };
+        return (id, v) => (exports2[id] = previous ? previous(id, v) : v);
       }
-    })(function (exporter) {
+    })((exporter) => {
       var extendStatics =
         Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array &&
-          function (d, b) {
+          ((d, b) => {
             d.__proto__ = b;
-          }) ||
-        function (d, b) {
-          for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
-        };
-      __extends = function (d, b) {
+          })) ||
+        ((d, b) => {
+          for (var p in b) if (Object.hasOwn(b, p)) d[p] = b[p];
+        });
+      __extends = (d, b) => {
         if (typeof b !== "function" && b !== null)
           throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
@@ -8344,17 +8287,17 @@ var require_tslib = __commonJS({
       };
       __assign =
         Object.assign ||
-        function (t) {
+        ((t) => {
           for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+            for (var p in s) if (Object.hasOwn(s, p)) t[p] = s[p];
           }
           return t;
-        };
-      __rest = function (s, e) {
+        });
+      __rest = (s, e) => {
         var t = {};
         for (var p in s)
-          if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+          if (Object.hasOwn(s, p) && e.indexOf(p) < 0) t[p] = s[p];
         if (s != null && typeof Object.getOwnPropertySymbols === "function")
           for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
             if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
@@ -8362,7 +8305,7 @@ var require_tslib = __commonJS({
           }
         return t;
       };
-      __decorate = function (decorators, target, key, desc) {
+      __decorate = (decorators, target, key, desc) => {
         var c = arguments.length,
           r =
             c < 3
@@ -8379,19 +8322,17 @@ var require_tslib = __commonJS({
               r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
       };
-      __param = function (paramIndex, decorator) {
-        return function (target, key) {
+      __param = (paramIndex, decorator) => (target, key) => {
           decorator(target, key, paramIndex);
         };
-      };
-      __esDecorate = function (
+      __esDecorate = (
         ctor,
         descriptorIn,
         decorators,
         contextIn,
         initializers,
         extraInitializers
-      ) {
+      ) => {
         function accept(f) {
           if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected");
           return f;
@@ -8407,7 +8348,7 @@ var require_tslib = __commonJS({
           var context = {};
           for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
           for (var p in contextIn.access) context.access[p] = contextIn.access[p];
-          context.addInitializer = function (f) {
+          context.addInitializer = (f) => {
             if (done) throw new TypeError("Cannot add initializers after decoration has completed");
             extraInitializers.push(accept(f || null));
           };
@@ -8430,17 +8371,15 @@ var require_tslib = __commonJS({
         if (target) Object.defineProperty(target, contextIn.name, descriptor);
         done = true;
       };
-      __runInitializers = function (thisArg, initializers, value) {
+      __runInitializers = (thisArg, initializers, value) => {
         var useValue = arguments.length > 2;
         for (var i = 0; i < initializers.length; i++) {
           value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
         }
         return useValue ? value : void 0;
       };
-      __propKey = function (x) {
-        return typeof x === "symbol" ? x : "".concat(x);
-      };
-      __setFunctionName = function (f, name, prefix) {
+      __propKey = (x) => typeof x === "symbol" ? x : "".concat(x);
+      __setFunctionName = (f, name, prefix) => {
         if (typeof name === "symbol")
           name = name.description ? "[".concat(name.description, "]") : "";
         return Object.defineProperty(f, "name", {
@@ -8448,19 +8387,19 @@ var require_tslib = __commonJS({
           value: prefix ? "".concat(prefix, " ", name) : name,
         });
       };
-      __metadata = function (metadataKey, metadataValue) {
+      __metadata = (metadataKey, metadataValue) => {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
           return Reflect.metadata(metadataKey, metadataValue);
       };
-      __awaiter = function (thisArg, _arguments, P, generator) {
+      __awaiter = (thisArg, _arguments, P, generator) => {
         function adopt(value) {
           return value instanceof P
             ? value
-            : new P(function (resolve) {
+            : new P((resolve) => {
                 resolve(value);
               });
         }
-        return new (P || (P = Promise))(function (resolve, reject) {
+        return new (P || (P = Promise))((resolve, reject) => {
           function fulfilled(value) {
             try {
               step(generator.next(value));
@@ -8481,10 +8420,10 @@ var require_tslib = __commonJS({
           step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
       };
-      __generator = function (thisArg, body) {
+      __generator = (thisArg, body) => {
         var _ = {
             label: 0,
-            sent: function () {
+            sent: () => {
               if (t[0] & 1) throw t[1];
               return t[1];
             },
@@ -8504,9 +8443,7 @@ var require_tslib = __commonJS({
           g
         );
         function verb(n) {
-          return function (v) {
-            return step([n, v]);
-          };
+          return (v) => step([n, v]);
         }
         function step(op) {
           if (f) throw new TypeError("Generator is already executing.");
@@ -8579,44 +8516,42 @@ var require_tslib = __commonJS({
           return { value: op[0] ? op[1] : void 0, done: true };
         }
       };
-      __exportStar = function (m, o) {
+      __exportStar = (m, o) => {
         for (var p in m)
-          if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p))
+          if (p !== "default" && !Object.hasOwn(o, p))
             __createBinding(o, m, p);
       };
       __createBinding = Object.create
-        ? function (o, m, k, k2) {
+        ? ((o, m, k, k2) => {
             if (k2 === void 0) k2 = k;
             var desc = Object.getOwnPropertyDescriptor(m, k);
             if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
               desc = {
                 enumerable: true,
-                get: function () {
-                  return m[k];
-                },
+                get: () => m[k],
               };
             }
             Object.defineProperty(o, k2, desc);
-          }
-        : function (o, m, k, k2) {
+          })
+        : ((o, m, k, k2) => {
             if (k2 === void 0) k2 = k;
             o[k2] = m[k];
-          };
-      __values = function (o) {
+          });
+      __values = (o) => {
         var s = typeof Symbol === "function" && Symbol.iterator,
           m = s && o[s],
           i = 0;
         if (m) return m.call(o);
         if (o && typeof o.length === "number")
           return {
-            next: function () {
+            next: () => {
               if (o && i >= o.length) o = void 0;
               return { value: o && o[i++], done: !o };
             },
           };
         throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
       };
-      __read = function (o, n) {
+      __read = (o, n) => {
         var m = typeof Symbol === "function" && o[Symbol.iterator];
         if (!m) return o;
         var i = m.call(o),
@@ -8636,17 +8571,17 @@ var require_tslib = __commonJS({
         }
         return ar;
       };
-      __spread = function () {
+      __spread = () => {
         for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
         return ar;
       };
-      __spreadArrays = function () {
+      __spreadArrays = () => {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
         for (var r = Array(s), k = 0, i = 0; i < il; i++)
           for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
         return r;
       };
-      __spreadArray = function (to, from, pack) {
+      __spreadArray = (to, from, pack) => {
         if (pack || arguments.length === 2)
           for (var i = 0, l = from.length, ar; i < l; i++) {
             if (ar || !(i in from)) {
@@ -8659,7 +8594,7 @@ var require_tslib = __commonJS({
       __await = function (v) {
         return this instanceof __await ? ((this.v = v), this) : new __await(v);
       };
-      __asyncGenerator = function (thisArg, _arguments, generator) {
+      __asyncGenerator = (thisArg, _arguments, generator) => {
         if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
         var g = generator.apply(thisArg, _arguments || []),
           i,
@@ -8675,17 +8610,13 @@ var require_tslib = __commonJS({
           i
         );
         function awaitReturn(f) {
-          return function (v) {
-            return Promise.resolve(v).then(f, reject);
-          };
+          return (v) => Promise.resolve(v).then(f, reject);
         }
         function verb(n, f) {
           if (g[n]) {
-            i[n] = function (v) {
-              return new Promise(function (a, b) {
+            i[n] = (v) => new Promise((a, b) => {
                 q.push([n, v, a, b]) > 1 || resume(n, v);
               });
-            };
             if (f) i[n] = f(i[n]);
           }
         }
@@ -8711,12 +8642,12 @@ var require_tslib = __commonJS({
           if ((f(v), q.shift(), q.length)) resume(q[0][0], q[0][1]);
         }
       };
-      __asyncDelegator = function (o) {
+      __asyncDelegator = (o) => {
         var i, p;
         return (
           (i = {}),
           verb("next"),
-          verb("throw", function (e) {
+          verb("throw", (e) => {
             throw e;
           }),
           verb("return"),
@@ -8727,13 +8658,11 @@ var require_tslib = __commonJS({
         );
         function verb(n, f) {
           i[n] = o[n]
-            ? function (v) {
-                return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v;
-              }
+            ? ((v) => (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v)
             : f;
         }
       };
-      __asyncValues = function (o) {
+      __asyncValues = (o) => {
         if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
         var m = o[Symbol.asyncIterator],
           i;
@@ -8751,19 +8680,17 @@ var require_tslib = __commonJS({
         function verb(n) {
           i[n] =
             o[n] &&
-            function (v) {
-              return new Promise(function (resolve, reject) {
+            ((v) => new Promise((resolve, reject) => {
                 (v = o[n](v)), settle(resolve, reject, v.done, v.value);
-              });
-            };
+              }));
         }
         function settle(resolve, reject, d, v) {
-          Promise.resolve(v).then(function (v2) {
+          Promise.resolve(v).then((v2) => {
             resolve({ value: v2, done: d });
           }, reject);
         }
       };
-      __makeTemplateObject = function (cooked, raw) {
+      __makeTemplateObject = (cooked, raw) => {
         if (Object.defineProperty) {
           Object.defineProperty(cooked, "raw", { value: raw });
         } else {
@@ -8772,27 +8699,25 @@ var require_tslib = __commonJS({
         return cooked;
       };
       var __setModuleDefault = Object.create
-        ? function (o, v) {
+        ? ((o, v) => {
             Object.defineProperty(o, "default", { enumerable: true, value: v });
-          }
-        : function (o, v) {
+          })
+        : ((o, v) => {
             o["default"] = v;
-          };
-      __importStar = function (mod) {
+          });
+      __importStar = (mod) => {
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
           for (var k in mod)
-            if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
+            if (k !== "default" && Object.hasOwn(mod, k))
               __createBinding(result, mod, k);
         }
         __setModuleDefault(result, mod);
         return result;
       };
-      __importDefault = function (mod) {
-        return mod && mod.__esModule ? mod : { default: mod };
-      };
-      __classPrivateFieldGet = function (receiver, state, kind, f) {
+      __importDefault = (mod) => mod && mod.__esModule ? mod : { default: mod };
+      __classPrivateFieldGet = (receiver, state, kind, f) => {
         if (kind === "a" && !f)
           throw new TypeError("Private accessor was defined without a getter");
         if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
@@ -8807,7 +8732,7 @@ var require_tslib = __commonJS({
               ? f.value
               : state.get(receiver);
       };
-      __classPrivateFieldSet = function (receiver, state, value, kind, f) {
+      __classPrivateFieldSet = (receiver, state, value, kind, f) => {
         if (kind === "m") throw new TypeError("Private method is not writable");
         if (kind === "a" && !f)
           throw new TypeError("Private accessor was defined without a setter");
@@ -8824,12 +8749,12 @@ var require_tslib = __commonJS({
           value
         );
       };
-      __classPrivateFieldIn = function (state, receiver) {
+      __classPrivateFieldIn = (state, receiver) => {
         if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function"))
           throw new TypeError("Cannot use 'in' operator on non-object");
         return typeof state === "function" ? receiver === state : state.has(receiver);
       };
-      __addDisposableResource = function (env, value, async) {
+      __addDisposableResource = (env, value, async) => {
         if (value !== null && value !== void 0) {
           if (typeof value !== "object" && typeof value !== "function")
             throw new TypeError("Object expected.");
@@ -8861,13 +8786,13 @@ var require_tslib = __commonJS({
       var _SuppressedError =
         typeof SuppressedError === "function"
           ? SuppressedError
-          : function (error, suppressed, message) {
+          : ((error, suppressed, message) => {
               var e = new Error(message);
               return (
                 (e.name = "SuppressedError"), (e.error = error), (e.suppressed = suppressed), e
               );
-            };
-      __disposeResources = function (env) {
+            });
+      __disposeResources = (env) => {
         function fail(e) {
           env.error = env.hasError
             ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.")
@@ -8880,7 +8805,7 @@ var require_tslib = __commonJS({
             try {
               var result = rec.dispose && rec.dispose.call(rec.value);
               if (rec.async)
-                return Promise.resolve(result).then(next, function (e) {
+                return Promise.resolve(result).then(next, (e) => {
                   fail(e);
                   return next();
                 });
@@ -8930,7 +8855,6 @@ var require_tslib = __commonJS({
 // node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js
 var require_client = __commonJS({
   "node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -8941,7 +8865,7 @@ var require_client = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -8978,7 +8902,7 @@ var require_dist_cjs36 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -9190,29 +9114,33 @@ var require_dist_cjs36 = __commonJS({
             return Uint8Array.from([header.value ? 0 : 1]);
           case "byte":
             return Uint8Array.from([2, header.value]);
-          case "short":
+          case "short": {
             const shortView = new DataView(new ArrayBuffer(3));
             shortView.setUint8(0, 3);
             shortView.setInt16(1, header.value, false);
             return new Uint8Array(shortView.buffer);
-          case "integer":
+          }
+          case "integer": {
             const intView = new DataView(new ArrayBuffer(5));
             intView.setUint8(0, 4);
             intView.setInt32(1, header.value, false);
             return new Uint8Array(intView.buffer);
-          case "long":
+          }
+          case "long": {
             const longBytes = new Uint8Array(9);
             longBytes[0] = 5;
             longBytes.set(header.value.bytes, 1);
             return longBytes;
-          case "binary":
+          }
+          case "binary": {
             const binView = new DataView(new ArrayBuffer(3 + header.value.byteLength));
             binView.setUint8(0, 6);
             binView.setUint16(1, header.value.byteLength, false);
             const binBytes = new Uint8Array(binView.buffer);
             binBytes.set(header.value, 3);
             return binBytes;
-          case "string":
+          }
+          case "string": {
             const utf8Bytes = (0, import_util_utf83.fromUtf8)(header.value);
             const strView = new DataView(new ArrayBuffer(3 + utf8Bytes.byteLength));
             strView.setUint8(0, 7);
@@ -9220,22 +9148,25 @@ var require_dist_cjs36 = __commonJS({
             const strBytes = new Uint8Array(strView.buffer);
             strBytes.set(utf8Bytes, 3);
             return strBytes;
-          case "timestamp":
+          }
+          case "timestamp": {
             const tsBytes = new Uint8Array(9);
             tsBytes[0] = 8;
             tsBytes.set(Int64.fromNumber(header.value.valueOf()).bytes, 1);
             return tsBytes;
-          case "uuid":
+          }
+          case "uuid": {
             if (!UUID_PATTERN.test(header.value)) {
               throw new Error(`Invalid UUID received: ${header.value}`);
             }
             const uuidBytes = new Uint8Array(17);
             uuidBytes[0] = 9;
             uuidBytes.set(
-              (0, import_util_hex_encoding.fromHex)(header.value.replace(/\-/g, "")),
+              (0, import_util_hex_encoding.fromHex)(header.value.replace(/-/g, "")),
               1
             );
             return uuidBytes;
+          }
         }
       }
     };
@@ -9588,7 +9519,7 @@ ${(0, import_util_hex_encoding.toHex)(hashedRequest)}`;
     __name(_SignatureV4, "SignatureV4");
     var SignatureV4 = _SignatureV4;
     var formatDate = /* @__PURE__ */ __name((now) => {
-      const longDate = iso8601(now).replace(/[\-:]/g, "");
+      const longDate = iso8601(now).replace(/[-:]/g, "");
       return {
         longDate,
         shortDate: longDate.slice(0, 8),
@@ -9604,7 +9535,6 @@ ${(0, import_util_hex_encoding.toHex)(hashedRequest)}`;
 // node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js
 var require_httpAuthSchemes = __commonJS({
   "node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -9615,7 +9545,7 @@ var require_httpAuthSchemes = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -9840,13 +9770,12 @@ var require_httpAuthSchemes = __commonJS({
 // node_modules/fast-xml-parser/src/util.js
 var require_util = __commonJS({
   "node_modules/fast-xml-parser/src/util.js"(exports) {
-    "use strict";
     var nameStartChar =
       ":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
     var nameChar = nameStartChar + "\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040";
     var nameRegexp = "[" + nameStartChar + "][" + nameChar + "]*";
     var regexName = new RegExp("^" + nameRegexp + "$");
-    var getAllMatches = function (string, regex) {
+    var getAllMatches = (string, regex) => {
       const matches = [];
       let match = regex.exec(string);
       while (match) {
@@ -9861,17 +9790,13 @@ var require_util = __commonJS({
       }
       return matches;
     };
-    var isName = function (string) {
+    var isName = (string) => {
       const match = regexName.exec(string);
       return !(match === null || typeof match === "undefined");
     };
-    exports.isExist = function (v) {
-      return typeof v !== "undefined";
-    };
-    exports.isEmptyObject = function (obj) {
-      return Object.keys(obj).length === 0;
-    };
-    exports.merge = function (target, a, arrayMode) {
+    exports.isExist = (v) => typeof v !== "undefined";
+    exports.isEmptyObject = (obj) => Object.keys(obj).length === 0;
+    exports.merge = (target, a, arrayMode) => {
       if (a) {
         const keys = Object.keys(a);
         const len = keys.length;
@@ -9884,7 +9809,7 @@ var require_util = __commonJS({
         }
       }
     };
-    exports.getValue = function (v) {
+    exports.getValue = (v) => {
       if (exports.isExist(v)) {
         return v;
       } else {
@@ -9900,13 +9825,12 @@ var require_util = __commonJS({
 // node_modules/fast-xml-parser/src/validator.js
 var require_validator = __commonJS({
   "node_modules/fast-xml-parser/src/validator.js"(exports) {
-    "use strict";
     var util = require_util();
     var defaultOptions = {
       allowBooleanAttributes: false,
       unpairedTags: [],
     };
-    exports.validate = function (xmlData, options) {
+    exports.validate = (xmlData, options) => {
       options = Object.assign({}, defaultOptions, options);
       const tags = [];
       let tagFound = false;
@@ -9920,11 +9844,10 @@ var require_validator = __commonJS({
           i = readPI(xmlData, i);
           if (i.err) return i;
         } else if (xmlData[i] === "<") {
-          let tagStartPos = i;
+          const tagStartPos = i;
           i++;
           if (xmlData[i] === "!") {
             i = readCommentAndCDATA(xmlData, i);
-            continue;
           } else {
             let closingTag = false;
             if (xmlData[i] === "/") {
@@ -9997,7 +9920,7 @@ var require_validator = __commonJS({
               } else {
                 const otg = tags.pop();
                 if (tagName !== otg.tagName) {
-                  let openPos = getLineNumberForPosition(xmlData, otg.tagStartPos);
+                  const openPos = getLineNumberForPosition(xmlData, otg.tagStartPos);
                   return getErrorObject(
                     "InvalidTag",
                     "Expected closing tag '" +
@@ -10042,7 +9965,6 @@ var require_validator = __commonJS({
                 if (xmlData[i + 1] === "!") {
                   i++;
                   i = readCommentAndCDATA(xmlData, i);
-                  continue;
                 } else if (xmlData[i + 1] === "?") {
                   i = readPI(xmlData, ++i);
                   if (i.err) return i;
@@ -10124,7 +10046,6 @@ var require_validator = __commonJS({
             i++;
             break;
           } else {
-            continue;
           }
         }
       }
@@ -10209,10 +10130,7 @@ var require_validator = __commonJS({
         tagClosed,
       };
     }
-    var validAttrStrRegxp = new RegExp(
-      `(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['"])(([\\s\\S])*?)\\5)?`,
-      "g"
-    );
+    var validAttrStrRegxp = /(\s*)([^\s=]+)(\s*=)?(\s*(['"])(([\s\S])*?)\5)?/g;
     function validateAttributeString(attrStr, options) {
       const matches = util.getAllMatches(attrStr, validAttrStrRegxp);
       const attrNames = {};
@@ -10244,7 +10162,7 @@ var require_validator = __commonJS({
             getPositionFromMatch(matches[i])
           );
         }
-        if (!attrNames.hasOwnProperty(attrName)) {
+        if (!Object.hasOwn(attrNames, attrName)) {
           attrNames[attrName] = 1;
         } else {
           return getErrorObject(
@@ -10332,12 +10250,8 @@ var require_OptionsBuilder = __commonJS({
         leadingZeros: true,
         eNotation: true,
       },
-      tagValueProcessor: function (tagName, val2) {
-        return val2;
-      },
-      attributeValueProcessor: function (attrName, val2) {
-        return val2;
-      },
+      tagValueProcessor: (tagName, val2) => val2,
+      attributeValueProcessor: (attrName, val2) => val2,
       stopNodes: [],
       alwaysCreateTextNode: false,
       isArray: () => false,
@@ -10349,13 +10263,9 @@ var require_OptionsBuilder = __commonJS({
       ignorePiTags: false,
       transformTagName: false,
       transformAttributeName: false,
-      updateTag: function (tagName, jPath, attrs) {
-        return tagName;
-      },
+      updateTag: (tagName, jPath, attrs) => tagName,
     };
-    var buildOptions = function (options) {
-      return Object.assign({}, defaultOptions, options);
-    };
+    var buildOptions = (options) => Object.assign({}, defaultOptions, options);
     exports.buildOptions = buildOptions;
     exports.defaultOptions = defaultOptions;
   },
@@ -10364,7 +10274,6 @@ var require_OptionsBuilder = __commonJS({
 // node_modules/fast-xml-parser/src/xmlparser/xmlNode.js
 var require_xmlNode = __commonJS({
   "node_modules/fast-xml-parser/src/xmlparser/xmlNode.js"(exports, module2) {
-    "use strict";
     var XmlNode = class {
       constructor(tagname) {
         this.tagname = tagname;
@@ -10536,7 +10445,7 @@ var require_DocTypeReader = __commonJS({
 var require_strnum = __commonJS({
   "node_modules/strnum/strnum.js"(exports, module2) {
     var hexRegex = /^[-+]?0x[a-fA-F0-9]+$/;
-    var numRegex = /^([\-\+])?(0*)(\.[0-9]+([eE]\-?[0-9]+)?|[0-9]+(\.[0-9]+([eE]\-?[0-9]+)?)?)$/;
+    var numRegex = /^([-+])?(0*)(\.[0-9]+([eE]-?[0-9]+)?|[0-9]+(\.[0-9]+([eE]-?[0-9]+)?)?)$/;
     if (!Number.parseInt && window.parseInt) {
       Number.parseInt = window.parseInt;
     }
@@ -10552,7 +10461,7 @@ var require_strnum = __commonJS({
     function toNumber(str, options = {}) {
       options = Object.assign({}, consider, options);
       if (!str || typeof str !== "string") return str;
-      let trimmedStr = str.trim();
+      const trimmedStr = str.trim();
       if (options.skipLike !== void 0 && options.skipLike.test(trimmedStr)) return str;
       else if (options.hex && hexRegex.test(trimmedStr)) {
         return Number.parseInt(trimmedStr, 16);
@@ -10561,7 +10470,7 @@ var require_strnum = __commonJS({
         if (match) {
           const sign = match[1];
           const leadingZeros = match[2];
-          let numTrimmedByZeros = trimZeros(match[3]);
+          const numTrimmedByZeros = trimZeros(match[3]);
           const eNotation = match[4] || match[6];
           if (!options.leadingZeros && leadingZeros.length > 0 && sign && trimmedStr[2] !== ".")
             return str;
@@ -10618,7 +10527,6 @@ var require_strnum = __commonJS({
 // node_modules/fast-xml-parser/src/xmlparser/OrderedObjParser.js
 var require_OrderedObjParser = __commonJS({
   "node_modules/fast-xml-parser/src/xmlparser/OrderedObjParser.js"(exports, module2) {
-    "use strict";
     var util = require_util();
     var xmlNode = require_xmlNode();
     var readDocType = require_DocTypeReader();
@@ -10725,7 +10633,7 @@ var require_OrderedObjParser = __commonJS({
       }
       return tagname;
     }
-    var attrsRegx = new RegExp(`([^\\s=]+)\\s*(=\\s*(['"])([\\s\\S]*?)\\3)?`, "gm");
+    var attrsRegx = /([^\s=]+)\s*(=\s*(['"])([\s\S]*?)\3)?/gm;
     function buildAttributesMap(attrStr, jPath, tagName) {
       if (!this.options.ignoreAttributes && typeof attrStr === "string") {
         const matches = util.getAllMatches(attrStr, attrsRegx);
@@ -10813,7 +10721,7 @@ var require_OrderedObjParser = __commonJS({
             textData = "";
             i = closeIndex;
           } else if (xmlData[i + 1] === "?") {
-            let tagData = readTagExp(xmlData, i, false, "?>");
+            const tagData = readTagExp(xmlData, i, false, "?>");
             if (!tagData) throw new Error("Pi Tag is not closed.");
             textData = this.saveTextToParentTag(textData, currentNode, jPath);
             if (
@@ -10858,11 +10766,11 @@ var require_OrderedObjParser = __commonJS({
             }
             i = closeIndex + 2;
           } else {
-            let result = readTagExp(xmlData, i, this.options.removeNSPrefix);
+            const result = readTagExp(xmlData, i, this.options.removeNSPrefix);
             let tagName = result.tagName;
             let tagExp = result.tagExp;
-            let attrExpPresent = result.attrExpPresent;
-            let closeIndex = result.closeIndex;
+            const attrExpPresent = result.attrExpPresent;
+            const closeIndex = result.closeIndex;
             if (this.options.transformTagName) {
               tagName = this.options.transformTagName(tagName);
             }
@@ -10957,16 +10865,16 @@ var require_OrderedObjParser = __commonJS({
     }
     var replaceEntitiesValue = function (val2) {
       if (this.options.processEntities) {
-        for (let entityName2 in this.docTypeEntities) {
+        for (const entityName2 in this.docTypeEntities) {
           const entity = this.docTypeEntities[entityName2];
           val2 = val2.replace(entity.regx, entity.val);
         }
-        for (let entityName2 in this.lastEntities) {
+        for (const entityName2 in this.lastEntities) {
           const entity = this.lastEntities[entityName2];
           val2 = val2.replace(entity.regex, entity.val);
         }
         if (this.options.htmlEntities) {
-          for (let entityName2 in this.htmlEntities) {
+          for (const entityName2 in this.htmlEntities) {
             const entity = this.htmlEntities[entityName2];
             val2 = val2.replace(entity.regex, entity.val);
           }
@@ -11070,7 +10978,7 @@ var require_OrderedObjParser = __commonJS({
         if (xmlData[i] === "<") {
           if (xmlData[i + 1] === "/") {
             const closeIndex = findClosingIndex(xmlData, ">", i, `${tagName} is not closed`);
-            let closeTagName = xmlData.substring(i + 2, closeIndex).trim();
+            const closeTagName = xmlData.substring(i + 2, closeIndex).trim();
             if (closeTagName === tagName) {
               openTagCount--;
               if (openTagCount === 0) {
@@ -11124,7 +11032,6 @@ var require_OrderedObjParser = __commonJS({
 // node_modules/fast-xml-parser/src/xmlparser/node2json.js
 var require_node2json = __commonJS({
   "node_modules/fast-xml-parser/src/xmlparser/node2json.js"(exports) {
-    "use strict";
     function prettify(node, options) {
       return compress(node, options);
     }
@@ -11141,7 +11048,6 @@ var require_node2json = __commonJS({
           if (text === void 0) text = tagObj[property];
           else text += "" + tagObj[property];
         } else if (property === void 0) {
-          continue;
         } else if (tagObj[property]) {
           let val2 = compress(tagObj[property], options, newJpath);
           const isLeaf = isLeafTag(val2, options);
@@ -11157,7 +11063,7 @@ var require_node2json = __commonJS({
             if (options.alwaysCreateTextNode) val2[options.textNodeName] = "";
             else val2 = "";
           }
-          if (compressedObj[property] !== void 0 && compressedObj.hasOwnProperty(property)) {
+          if (compressedObj[property] !== void 0 && Object.hasOwn(compressedObj, property)) {
             if (!Array.isArray(compressedObj[property])) {
               compressedObj[property] = [compressedObj[property]];
             }
@@ -11356,7 +11262,7 @@ var require_orderedJs2Xml = __commonJS({
     function attr_to_str(attrMap, options) {
       let attrStr = "";
       if (attrMap && !options.ignoreAttributes) {
-        for (let attr in attrMap) {
+        for (const attr in attrMap) {
           let attrVal = options.attributeValueProcessor(attr, attrMap[attr]);
           attrVal = replaceEntitiesValue(attrVal, options);
           if (attrVal === true && options.suppressBooleanAttributes) {
@@ -11370,8 +11276,8 @@ var require_orderedJs2Xml = __commonJS({
     }
     function isStopNode(jPath, options) {
       jPath = jPath.substr(0, jPath.length - options.textNodeName.length - 1);
-      let tagName = jPath.substr(jPath.lastIndexOf(".") + 1);
-      for (let index in options.stopNodes) {
+      const tagName = jPath.substr(jPath.lastIndexOf(".") + 1);
+      for (const index in options.stopNodes) {
         if (options.stopNodes[index] === jPath || options.stopNodes[index] === "*." + tagName)
           return true;
       }
@@ -11393,7 +11299,6 @@ var require_orderedJs2Xml = __commonJS({
 // node_modules/fast-xml-parser/src/xmlbuilder/json2xml.js
 var require_json2xml = __commonJS({
   "node_modules/fast-xml-parser/src/xmlbuilder/json2xml.js"(exports, module2) {
-    "use strict";
     var buildFromOrderedJs = require_orderedJs2Xml();
     var defaultOptions = {
       attributeNamePrefix: "@_",
@@ -11406,21 +11311,17 @@ var require_json2xml = __commonJS({
       suppressEmptyNode: false,
       suppressUnpairedNode: true,
       suppressBooleanAttributes: true,
-      tagValueProcessor: function (key, a) {
-        return a;
-      },
-      attributeValueProcessor: function (attrName, a) {
-        return a;
-      },
+      tagValueProcessor: (key, a) => a,
+      attributeValueProcessor: (attrName, a) => a,
       preserveOrder: false,
       commentPropName: false,
       unpairedTags: [],
       entities: [
-        { regex: new RegExp("&", "g"), val: "&amp;" },
-        { regex: new RegExp(">", "g"), val: "&gt;" },
-        { regex: new RegExp("<", "g"), val: "&lt;" },
-        { regex: new RegExp("'", "g"), val: "&apos;" },
-        { regex: new RegExp('"', "g"), val: "&quot;" },
+        { regex: /&/g, val: "&amp;" },
+        { regex: />/g, val: "&gt;" },
+        { regex: /</g, val: "&lt;" },
+        { regex: /'/g, val: "&apos;" },
+        { regex: /"/g, val: "&quot;" },
       ],
       processEntities: true,
       stopNodes: [],
@@ -11429,9 +11330,7 @@ var require_json2xml = __commonJS({
     function Builder(options) {
       this.options = Object.assign({}, defaultOptions, options);
       if (this.options.ignoreAttributes || this.options.attributesGroupName) {
-        this.isAttribute = function () {
-          return false;
-        };
+        this.isAttribute = () => false;
       } else {
         this.attrPrefixLen = this.options.attributeNamePrefix.length;
         this.isAttribute = isAttribute;
@@ -11442,9 +11341,7 @@ var require_json2xml = __commonJS({
         this.tagEndChar = ">\n";
         this.newLine = "\n";
       } else {
-        this.indentate = function () {
-          return "";
-        };
+        this.indentate = () => "";
         this.tagEndChar = ">";
         this.newLine = "";
       }
@@ -11468,7 +11365,7 @@ var require_json2xml = __commonJS({
     Builder.prototype.j2x = function (jObj, level) {
       let attrStr = "";
       let val2 = "";
-      for (let key in jObj) {
+      for (const key in jObj) {
         if (typeof jObj[key] === "undefined") {
         } else if (jObj[key] === null) {
           if (key[0] === "?") val2 += this.indentate(level) + "<" + key + "?" + this.tagEndChar;
@@ -11481,7 +11378,7 @@ var require_json2xml = __commonJS({
             attrStr += this.buildAttrPairStr(attr, "" + jObj[key]);
           } else {
             if (key === this.options.textNodeName) {
-              let newval = this.options.tagValueProcessor(key, "" + jObj[key]);
+              const newval = this.options.tagValueProcessor(key, "" + jObj[key]);
               val2 += this.replaceEntitiesValue(newval);
             } else {
               val2 += this.buildTextValNode(jObj[key], key, "", level);
@@ -11642,7 +11539,6 @@ var require_json2xml = __commonJS({
 // node_modules/fast-xml-parser/src/fxp.js
 var require_fxp = __commonJS({
   "node_modules/fast-xml-parser/src/fxp.js"(exports, module2) {
-    "use strict";
     var validator = require_validator();
     var XMLParser = require_XMLParser();
     var XMLBuilder = require_json2xml();
@@ -11657,7 +11553,6 @@ var require_fxp = __commonJS({
 // node_modules/@aws-sdk/core/dist-cjs/submodules/protocols/index.js
 var require_protocols = __commonJS({
   "node_modules/@aws-sdk/core/dist-cjs/submodules/protocols/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -11668,7 +11563,7 @@ var require_protocols = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -11886,7 +11781,6 @@ var require_protocols = __commonJS({
 // node_modules/@aws-sdk/core/dist-cjs/index.js
 var require_dist_cjs37 = __commonJS({
   "node_modules/@aws-sdk/core/dist-cjs/index.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var tslib_1 = require_tslib();
     tslib_1.__exportStar(require_client(), exports);
@@ -11898,7 +11792,6 @@ var require_dist_cjs37 = __commonJS({
 // node_modules/@aws-sdk/client-iot-wireless/dist-cjs/auth/httpAuthSchemeProvider.js
 var require_httpAuthSchemeProvider = __commonJS({
   "node_modules/@aws-sdk/client-iot-wireless/dist-cjs/auth/httpAuthSchemeProvider.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveHttpAuthSchemeConfig =
       exports.defaultIoTWirelessHttpAuthSchemeProvider =
@@ -12063,7 +11956,6 @@ var require_package = __commonJS({
 // node_modules/@aws-sdk/credential-provider-env/dist-cjs/index.js
 var require_dist_cjs38 = __commonJS({
   "node_modules/@aws-sdk/credential-provider-env/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -12074,7 +11966,7 @@ var require_dist_cjs38 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -12143,7 +12035,7 @@ var require_dist_cjs39 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -12614,7 +12506,6 @@ For more information, please visit: ` + STATIC_STABILITY_DOC_URL
 // node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/checkUrl.js
 var require_checkUrl = __commonJS({
   "node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/checkUrl.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.checkUrl = void 0;
     var property_provider_1 = require_dist_cjs12();
@@ -12673,7 +12564,6 @@ var require_checkUrl = __commonJS({
 // node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/requestHelpers.js
 var require_requestHelpers = __commonJS({
   "node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/requestHelpers.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getCredentials = exports.createGetRequest = void 0;
     var property_provider_1 = require_dist_cjs12();
@@ -12745,7 +12635,6 @@ var require_requestHelpers = __commonJS({
 // node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/retry-wrapper.js
 var require_retry_wrapper = __commonJS({
   "node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/retry-wrapper.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.retryWrapper = void 0;
     var retryWrapper = (toRetry, maxRetries, delayMs) => {
@@ -12767,7 +12656,6 @@ var require_retry_wrapper = __commonJS({
 // node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/fromHttp.js
 var require_fromHttp = __commonJS({
   "node_modules/@aws-sdk/credential-provider-http/dist-cjs/fromHttp/fromHttp.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fromHttp = void 0;
     var tslib_1 = require_tslib();
@@ -12863,15 +12751,12 @@ Set AWS_CONTAINER_CREDENTIALS_FULL_URI or AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 // node_modules/@aws-sdk/credential-provider-http/dist-cjs/index.js
 var require_dist_cjs40 = __commonJS({
   "node_modules/@aws-sdk/credential-provider-http/dist-cjs/index.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fromHttp = void 0;
     var fromHttp_1 = require_fromHttp();
     Object.defineProperty(exports, "fromHttp", {
       enumerable: true,
-      get: function () {
-        return fromHttp_1.fromHttp;
-      },
+      get: () => fromHttp_1.fromHttp,
     });
   },
 });
@@ -12879,7 +12764,6 @@ var require_dist_cjs40 = __commonJS({
 // node_modules/@aws-sdk/client-sso/dist-cjs/auth/httpAuthSchemeProvider.js
 var require_httpAuthSchemeProvider2 = __commonJS({
   "node_modules/@aws-sdk/client-sso/dist-cjs/auth/httpAuthSchemeProvider.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveHttpAuthSchemeConfig =
       exports.defaultSSOHttpAuthSchemeProvider =
@@ -13057,7 +12941,6 @@ var require_package2 = __commonJS({
 // node_modules/@aws-sdk/util-user-agent-node/dist-cjs/index.js
 var require_dist_cjs41 = __commonJS({
   "node_modules/@aws-sdk/util-user-agent-node/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -13068,7 +12951,7 @@ var require_dist_cjs41 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -13148,7 +13031,7 @@ var require_dist_cjs42 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -13220,7 +13103,7 @@ var require_dist_cjs43 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -13261,7 +13144,6 @@ var require_dist_cjs43 = __commonJS({
 // node_modules/@aws-sdk/client-sso/dist-cjs/endpoint/ruleset.js
 var require_ruleset = __commonJS({
   "node_modules/@aws-sdk/client-sso/dist-cjs/endpoint/ruleset.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ruleSet = void 0;
     var u = "required";
@@ -13423,7 +13305,6 @@ var require_ruleset = __commonJS({
 // node_modules/@aws-sdk/client-sso/dist-cjs/endpoint/endpointResolver.js
 var require_endpointResolver = __commonJS({
   "node_modules/@aws-sdk/client-sso/dist-cjs/endpoint/endpointResolver.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.defaultEndpointResolver = void 0;
     var util_endpoints_1 = require_dist_cjs7();
@@ -13443,7 +13324,6 @@ var require_endpointResolver = __commonJS({
 // node_modules/@aws-sdk/client-sso/dist-cjs/runtimeConfig.shared.js
 var require_runtimeConfig_shared = __commonJS({
   "node_modules/@aws-sdk/client-sso/dist-cjs/runtimeConfig.shared.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var core_1 = require_dist_cjs37();
@@ -13506,7 +13386,7 @@ var require_dist_cjs44 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -13619,7 +13499,6 @@ var require_dist_cjs44 = __commonJS({
 // node_modules/@aws-sdk/client-sso/dist-cjs/runtimeConfig.js
 var require_runtimeConfig = __commonJS({
   "node_modules/@aws-sdk/client-sso/dist-cjs/runtimeConfig.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var tslib_1 = require_tslib();
@@ -13701,7 +13580,6 @@ var require_runtimeConfig = __commonJS({
 // node_modules/@aws-sdk/region-config-resolver/dist-cjs/index.js
 var require_dist_cjs45 = __commonJS({
   "node_modules/@aws-sdk/region-config-resolver/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -13712,7 +13590,7 @@ var require_dist_cjs45 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -13818,7 +13696,6 @@ var require_dist_cjs45 = __commonJS({
 // node_modules/@aws-sdk/client-sso/dist-cjs/index.js
 var require_dist_cjs46 = __commonJS({
   "node_modules/@aws-sdk/client-sso/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -13829,7 +13706,7 @@ var require_dist_cjs46 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -14256,13 +14133,14 @@ var require_dist_cjs46 = __commonJS({
         case "UnauthorizedException":
         case "com.amazonaws.sso#UnauthorizedException":
           throw await de_UnauthorizedExceptionRes(parsedOutput, context);
-        default:
+        default: {
           const parsedBody = parsedOutput.body;
           return throwDefaultError({
             output,
             parsedBody,
             errorCode,
           });
+        }
       }
     }, "de_CommandError");
     var throwDefaultError = (0, import_smithy_client.withBaseException)(SSOServiceException);
@@ -14463,7 +14341,6 @@ var require_dist_cjs46 = __commonJS({
 // node_modules/@aws-sdk/client-sso-oidc/dist-cjs/auth/httpAuthSchemeProvider.js
 var require_httpAuthSchemeProvider3 = __commonJS({
   "node_modules/@aws-sdk/client-sso-oidc/dist-cjs/auth/httpAuthSchemeProvider.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveHttpAuthSchemeConfig =
       exports.defaultSSOOIDCHttpAuthSchemeProvider =
@@ -14640,7 +14517,6 @@ var require_package3 = __commonJS({
 // node_modules/@aws-sdk/client-sso-oidc/dist-cjs/endpoint/ruleset.js
 var require_ruleset2 = __commonJS({
   "node_modules/@aws-sdk/client-sso-oidc/dist-cjs/endpoint/ruleset.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ruleSet = void 0;
     var u = "required";
@@ -14802,7 +14678,6 @@ var require_ruleset2 = __commonJS({
 // node_modules/@aws-sdk/client-sso-oidc/dist-cjs/endpoint/endpointResolver.js
 var require_endpointResolver2 = __commonJS({
   "node_modules/@aws-sdk/client-sso-oidc/dist-cjs/endpoint/endpointResolver.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.defaultEndpointResolver = void 0;
     var util_endpoints_1 = require_dist_cjs7();
@@ -14822,7 +14697,6 @@ var require_endpointResolver2 = __commonJS({
 // node_modules/@aws-sdk/client-sso-oidc/dist-cjs/runtimeConfig.shared.js
 var require_runtimeConfig_shared2 = __commonJS({
   "node_modules/@aws-sdk/client-sso-oidc/dist-cjs/runtimeConfig.shared.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var core_1 = require_dist_cjs37();
@@ -14873,7 +14747,6 @@ var require_runtimeConfig_shared2 = __commonJS({
 // node_modules/@aws-sdk/client-sso-oidc/dist-cjs/runtimeConfig.js
 var require_runtimeConfig2 = __commonJS({
   "node_modules/@aws-sdk/client-sso-oidc/dist-cjs/runtimeConfig.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var tslib_1 = require_tslib();
@@ -14959,7 +14832,6 @@ var require_runtimeConfig2 = __commonJS({
 // node_modules/@aws-sdk/client-sso-oidc/dist-cjs/index.js
 var require_dist_cjs47 = __commonJS({
   "node_modules/@aws-sdk/client-sso-oidc/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -14970,7 +14842,7 @@ var require_dist_cjs47 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -15675,13 +15547,14 @@ var require_dist_cjs47 = __commonJS({
         case "InvalidRedirectUriException":
         case "com.amazonaws.ssooidc#InvalidRedirectUriException":
           throw await de_InvalidRedirectUriExceptionRes(parsedOutput, context);
-        default:
+        default: {
           const parsedBody = parsedOutput.body;
           return throwDefaultError({
             output,
             parsedBody,
             errorCode,
           });
+        }
       }
     }, "de_CommandError");
     var throwDefaultError = (0, import_smithy_client.withBaseException)(SSOOIDCServiceException);
@@ -16014,7 +15887,6 @@ var require_dist_cjs47 = __commonJS({
 // node_modules/@aws-sdk/token-providers/dist-cjs/index.js
 var require_dist_cjs48 = __commonJS({
   "node_modules/@aws-sdk/token-providers/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __create2 = Object.create;
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -16027,7 +15899,7 @@ var require_dist_cjs48 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -16224,7 +16096,6 @@ var require_dist_cjs48 = __commonJS({
 // node_modules/@aws-sdk/credential-provider-sso/dist-cjs/index.js
 var require_dist_cjs49 = __commonJS({
   "node_modules/@aws-sdk/credential-provider-sso/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -16239,7 +16110,7 @@ var require_dist_cjs49 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -16257,7 +16128,6 @@ var require_dist_cjs49 = __commonJS({
     var import_client_sso;
     var init_loadSso = __esm({
       "src/loadSso.ts"() {
-        "use strict";
         import_client_sso = require_dist_cjs46();
       },
     });
@@ -16487,7 +16357,6 @@ Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.ht
 // node_modules/@aws-sdk/client-sts/dist-cjs/auth/httpAuthSchemeProvider.js
 var require_httpAuthSchemeProvider4 = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/auth/httpAuthSchemeProvider.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveHttpAuthSchemeConfig =
       exports.resolveStsAuthConfig =
@@ -16565,7 +16434,6 @@ var require_httpAuthSchemeProvider4 = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/endpoint/EndpointParameters.js
 var require_EndpointParameters = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/endpoint/EndpointParameters.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.commonParams = exports.resolveClientEndpointParameters = void 0;
     var resolveClientEndpointParameters = (options) => {
@@ -16696,7 +16564,6 @@ var require_package4 = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/endpoint/ruleset.js
 var require_ruleset3 = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/endpoint/ruleset.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ruleSet = void 0;
     var F = "required";
@@ -16904,7 +16771,6 @@ var require_ruleset3 = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/endpoint/endpointResolver.js
 var require_endpointResolver3 = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/endpoint/endpointResolver.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.defaultEndpointResolver = void 0;
     var util_endpoints_1 = require_dist_cjs7();
@@ -16924,7 +16790,6 @@ var require_endpointResolver3 = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/runtimeConfig.shared.js
 var require_runtimeConfig_shared3 = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/runtimeConfig.shared.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var core_1 = require_dist_cjs37();
@@ -16975,7 +16840,6 @@ var require_runtimeConfig_shared3 = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/runtimeConfig.js
 var require_runtimeConfig3 = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/runtimeConfig.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var tslib_1 = require_tslib();
@@ -17080,7 +16944,6 @@ var require_runtimeConfig3 = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/auth/httpAuthExtensionConfiguration.js
 var require_httpAuthExtensionConfiguration = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/auth/httpAuthExtensionConfiguration.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveHttpAuthRuntimeConfig = exports.getHttpAuthExtensionConfiguration = void 0;
     var getHttpAuthExtensionConfiguration = (runtimeConfig) => {
@@ -17130,7 +16993,6 @@ var require_httpAuthExtensionConfiguration = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/runtimeExtensions.js
 var require_runtimeExtensions = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/runtimeExtensions.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resolveRuntimeExtensions = void 0;
     var region_config_resolver_1 = require_dist_cjs45();
@@ -17169,7 +17031,6 @@ var require_runtimeExtensions = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/STSClient.js
 var require_STSClient = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/STSClient.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.STSClient = exports.__Client = void 0;
     var middleware_host_header_1 = require_dist_cjs3();
@@ -17184,9 +17045,7 @@ var require_STSClient = __commonJS({
     var smithy_client_1 = require_dist_cjs32();
     Object.defineProperty(exports, "__Client", {
       enumerable: true,
-      get: function () {
-        return smithy_client_1.Client;
-      },
+      get: () => smithy_client_1.Client,
     });
     var httpAuthSchemeProvider_1 = require_httpAuthSchemeProvider4();
     var EndpointParameters_1 = require_EndpointParameters();
@@ -17246,7 +17105,6 @@ var require_STSClient = __commonJS({
 // node_modules/@aws-sdk/client-sts/dist-cjs/index.js
 var require_dist_cjs50 = __commonJS({
   "node_modules/@aws-sdk/client-sts/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -17257,7 +17115,7 @@ var require_dist_cjs50 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -17714,13 +17572,14 @@ var require_dist_cjs50 = __commonJS({
         case "InvalidAuthorizationMessageException":
         case "com.amazonaws.sts#InvalidAuthorizationMessageException":
           throw await de_InvalidAuthorizationMessageExceptionRes(parsedOutput, context);
-        default:
+        default: {
           const parsedBody = parsedOutput.body;
           return throwDefaultError({
             output,
             parsedBody: parsedBody.Error,
             errorCode,
           });
+        }
       }
     }, "de_CommandError");
     var de_ExpiredTokenExceptionRes = /* @__PURE__ */ __name(async (parsedOutput, context) => {
@@ -18776,7 +18635,6 @@ var require_dist_cjs50 = __commonJS({
 // node_modules/@aws-sdk/credential-provider-process/dist-cjs/index.js
 var require_dist_cjs51 = __commonJS({
   "node_modules/@aws-sdk/credential-provider-process/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -18787,7 +18645,7 @@ var require_dist_cjs51 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -18888,49 +18746,46 @@ var require_dist_cjs51 = __commonJS({
 // node_modules/@aws-sdk/credential-provider-web-identity/dist-cjs/fromWebToken.js
 var require_fromWebToken = __commonJS({
   "node_modules/@aws-sdk/credential-provider-web-identity/dist-cjs/fromWebToken.js"(exports) {
-    "use strict";
     var __createBinding =
       (exports && exports.__createBinding) ||
       (Object.create
-        ? function (o, m, k, k2) {
+        ? ((o, m, k, k2) => {
             if (k2 === void 0) k2 = k;
             var desc = Object.getOwnPropertyDescriptor(m, k);
             if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
               desc = {
                 enumerable: true,
-                get: function () {
-                  return m[k];
-                },
+                get: () => m[k],
               };
             }
             Object.defineProperty(o, k2, desc);
-          }
-        : function (o, m, k, k2) {
+          })
+        : ((o, m, k, k2) => {
             if (k2 === void 0) k2 = k;
             o[k2] = m[k];
-          });
+          }));
     var __setModuleDefault =
       (exports && exports.__setModuleDefault) ||
       (Object.create
-        ? function (o, v) {
+        ? ((o, v) => {
             Object.defineProperty(o, "default", { enumerable: true, value: v });
-          }
-        : function (o, v) {
+          })
+        : ((o, v) => {
             o["default"] = v;
-          });
+          }));
     var __importStar =
       (exports && exports.__importStar) ||
-      function (mod) {
+      ((mod) => {
         if (mod && mod.__esModule) return mod;
         var result = {};
         if (mod != null) {
           for (var k in mod)
-            if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
+            if (k !== "default" && Object.hasOwn(mod, k))
               __createBinding(result, mod, k);
         }
         __setModuleDefault(result, mod);
         return result;
-      };
+      });
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fromWebToken = void 0;
     var fromWebToken2 = (init) => async () => {
@@ -18978,7 +18833,6 @@ var require_fromWebToken = __commonJS({
 // node_modules/@aws-sdk/credential-provider-web-identity/dist-cjs/fromTokenFile.js
 var require_fromTokenFile = __commonJS({
   "node_modules/@aws-sdk/credential-provider-web-identity/dist-cjs/fromTokenFile.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fromTokenFile = void 0;
     var property_provider_1 = require_dist_cjs12();
@@ -19021,14 +18875,13 @@ var require_fromTokenFile = __commonJS({
 // node_modules/@aws-sdk/credential-provider-web-identity/dist-cjs/index.js
 var require_dist_cjs52 = __commonJS({
   "node_modules/@aws-sdk/credential-provider-web-identity/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -19052,7 +18905,6 @@ var require_dist_cjs52 = __commonJS({
 // node_modules/@aws-sdk/credential-provider-ini/dist-cjs/index.js
 var require_dist_cjs53 = __commonJS({
   "node_modules/@aws-sdk/credential-provider-ini/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __create2 = Object.create;
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -19065,7 +18917,7 @@ var require_dist_cjs53 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -19390,7 +19242,6 @@ var require_dist_cjs53 = __commonJS({
 // node_modules/@aws-sdk/credential-provider-node/dist-cjs/index.js
 var require_dist_cjs54 = __commonJS({
   "node_modules/@aws-sdk/credential-provider-node/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __create2 = Object.create;
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -19403,7 +19254,7 @@ var require_dist_cjs54 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -19563,7 +19414,6 @@ var require_dist_cjs54 = __commonJS({
 // node_modules/@aws-sdk/client-iot-wireless/dist-cjs/endpoint/ruleset.js
 var require_ruleset4 = __commonJS({
   "node_modules/@aws-sdk/client-iot-wireless/dist-cjs/endpoint/ruleset.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ruleSet = void 0;
     var s = "required";
@@ -19709,7 +19559,6 @@ var require_ruleset4 = __commonJS({
 // node_modules/@aws-sdk/client-iot-wireless/dist-cjs/endpoint/endpointResolver.js
 var require_endpointResolver4 = __commonJS({
   "node_modules/@aws-sdk/client-iot-wireless/dist-cjs/endpoint/endpointResolver.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.defaultEndpointResolver = void 0;
     var util_endpoints_1 = require_dist_cjs7();
@@ -19729,7 +19578,6 @@ var require_endpointResolver4 = __commonJS({
 // node_modules/@aws-sdk/client-iot-wireless/dist-cjs/runtimeConfig.shared.js
 var require_runtimeConfig_shared4 = __commonJS({
   "node_modules/@aws-sdk/client-iot-wireless/dist-cjs/runtimeConfig.shared.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var core_1 = require_dist_cjs37();
@@ -19773,7 +19621,6 @@ var require_runtimeConfig_shared4 = __commonJS({
 // node_modules/@aws-sdk/client-iot-wireless/dist-cjs/runtimeConfig.js
 var require_runtimeConfig4 = __commonJS({
   "node_modules/@aws-sdk/client-iot-wireless/dist-cjs/runtimeConfig.js"(exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getRuntimeConfig = void 0;
     var tslib_1 = require_tslib();
@@ -19859,7 +19706,6 @@ var require_runtimeConfig4 = __commonJS({
 // node_modules/@aws-sdk/client-iot-wireless/dist-cjs/index.js
 var require_dist_cjs55 = __commonJS({
   "node_modules/@aws-sdk/client-iot-wireless/dist-cjs/index.js"(exports, module2) {
-    "use strict";
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -19870,7 +19716,7 @@ var require_dist_cjs55 = __commonJS({
     };
     var __copyProps2 = (to, from, except, desc) => {
       if ((from && typeof from === "object") || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
+        for (const key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
             __defProp2(to, key, {
               get: () => from[key],
@@ -24287,13 +24133,14 @@ var require_dist_cjs55 = __commonJS({
         case "TooManyTagsException":
         case "com.amazonaws.iotwireless#TooManyTagsException":
           throw await de_TooManyTagsExceptionRes(parsedOutput, context);
-        default:
+        default: {
           const parsedBody = parsedOutput.body;
           return throwDefaultError({
             output,
             parsedBody,
             errorCode,
           });
+        }
       }
     }, "de_CommandError");
     var throwDefaultError = (0, import_smithy_client.withBaseException)(
@@ -27522,14 +27369,14 @@ function _createAWSPayload(gnssValue, ipAddress, wifiAddresses) {
   return payload;
 }
 function _createDataForDevice(scope, desireableAccuracy, estimatedLocation) {
-  let lat = estimatedLocation.coordinates[1];
-  let lng = estimatedLocation.coordinates[0];
-  let horizontalAccuracy = estimatedLocation.properties.horizontalConfidenceLevel;
-  let verticalAccuracy = estimatedLocation.properties.verticalConfidenceLevel;
-  let accuracy =
+  const lat = estimatedLocation.coordinates[1];
+  const lng = estimatedLocation.coordinates[0];
+  const horizontalAccuracy = estimatedLocation.properties.horizontalConfidenceLevel;
+  const verticalAccuracy = estimatedLocation.properties.verticalConfidenceLevel;
+  const accuracy =
     horizontalAccuracy >= parseFloat(desireableAccuracy) ||
     verticalAccuracy >= parseFloat(desireableAccuracy);
-  let dataReturn = {
+  const dataReturn = {
     variable: "estimated_location",
     value: lat + ";" + lng,
     location: {

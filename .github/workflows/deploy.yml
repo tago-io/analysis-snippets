@@ -20,8 +20,11 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Generate JSON files
-        run: deno task generate
+      - name: Install npm deps with Deno
+        run: deno install --allow-scripts
+
+      - name: Build site with Deno
+        run: deno task build
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4

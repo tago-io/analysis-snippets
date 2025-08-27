@@ -1,0 +1,94 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { PAYLOAD_PARSER_RUNTIMES, collectSnippets } from '../../../lib/snippets.ts';
+
+export async function getStaticPaths() {
+  const paths = [];
+  
+  for (const runtime of PAYLOAD_PARSER_RUNTIMES) {
+    const snippets = await collectSnippets(runtime);
+    const metadata = snippets.map(({ code, ...meta }) => meta);
+    
+    paths.push({
+      params: { runtime: runtime.name },
+      props: { 
+        runtime,
+        snippets: metadata 
+      }
+    });
+  }
+  
+  return paths;
+}
+
+const { runtime, snippets } = Astro.props;
+---
+
+<BaseLayout title={`${runtime.displayName} • Payload Parser • TagoIO Snippets`}>
+  <main class="container max-w-4xl mx-auto px-4 py-10">
+    <!-- Header -->
+    <div class="mb-8">
+      <nav class="text-sm text-muted-foreground mb-4">
+        <a href="/" class="hover:underline">Home</a> 
+        <span class="mx-2">›</span>
+        <span>Payload Parser</span>
+        <span class="mx-2">›</span>
+        <span>{runtime.displayName}</span>
+      </nav>
+      
+      <h1 class="text-3xl font-bold mb-4">{runtime.displayName} Payload Parser Snippets</h1>
+      <p class="text-muted-foreground mb-6">
+        Browse all available payload parser snippets for the {runtime.displayName} runtime.
+      </p>
+      
+      <div class="flex space-x-4 mb-8">
+        <a href={`/payload-parser/${runtime.name}.json`} class="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 text-sm">
+          📄 Download JSON Metadata
+        </a>
+      </div>
+    </div>
+
+    <!-- Snippets List -->
+    {snippets.length > 0 ? (
+      <div class="grid gap-4">
+        {snippets.map((snippet) => (
+          <div class="border rounded-lg p-6 hover:bg-muted/50 transition-colors">
+            <div class="flex items-start justify-between mb-3">
+              <h2 class="text-lg font-semibold">{snippet.title}</h2>
+              <div class="flex flex-wrap gap-1 ml-4">
+                {snippet.tags.map((tag) => (
+                  <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            <p class="text-sm text-muted-foreground mb-4">{snippet.description}</p>
+            
+            <div class="flex items-center space-x-4">
+              <a 
+                href={`/payload-parser/${runtime.name}/${snippet.filename}`}
+                class="text-primary hover:underline text-sm font-medium"
+              >
+                📄 {snippet.filename}
+              </a>
+              <span class="text-xs text-muted-foreground">
+                {snippet.language}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-muted-foreground">No snippets available for this runtime.</p>
+      </div>
+    )}
+
+    <!-- Back to Home -->
+    <div class="mt-12 text-center">
+      <a href="/" class="text-primary hover:underline">← Back to Home</a>
+    </div>
+  </main>
+</BaseLayout>

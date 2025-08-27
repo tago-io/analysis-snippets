@@ -1,5 +1,10 @@
 dist/
+public/analysis/
+public/payload-parser/
 *.pyc
 __pycache__/
 .env
 .DS_STORE
+node_modules/
+.claude/
+.astro/
